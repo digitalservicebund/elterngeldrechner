@@ -58,7 +58,7 @@ export function AbschnittMitEinkommen(): ReactNode {
               Geben Sie Ihr erwartetes Einkommen an
             </span>
 
-            <p>
+            <p className="mt-0">
               Wenn Sie sich für Partnerschaftsbonus entscheiden, müssen Sie
               mindestens 24 bis maximal 32 Stunden in Teilzeit arbeiten.
             </p>
@@ -70,7 +70,7 @@ export function AbschnittMitEinkommen(): ReactNode {
               Monat?
             </span>
 
-            <p>
+            <p className="mt-0">
               Wenn Sie Elterngeld bekommen, können Sie in Teilzeit arbeiten. Sie
               können bis maximal 32 Stunden pro Woche arbeiten.
             </p>
@@ -78,9 +78,12 @@ export function AbschnittMitEinkommen(): ReactNode {
         )}
 
         {!!istBruttoeinkommenMissing && (
-          <div className="mt-8 w-full rounded bg-warning-light px-8 py-6">
-            <ErrorIcon className="text-warning" /> Beim Partnerschaftsbonus ist
-            Arbeit in Teilzeit Pflicht. Geben Sie ein Einkommen ein.
+          <div className="flex mt-8 w-full rounded bg-warning-light px-8 py-6">
+            <ErrorIcon className="text-warning mr-8 mt-4" />
+            <p className="mt-0">
+              Beim Partnerschaftsbonus ist Arbeit in Teilzeit Pflicht. Geben Sie
+              ein Einkommen ein.
+            </p>
           </div>
         )}
       </div>

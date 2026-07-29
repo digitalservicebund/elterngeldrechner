@@ -161,7 +161,7 @@ export function PlanerPage() {
         {isErklaerungOpen ? (
           <Erklaerung onClose={hideErklaerung} />
         ) : (
-          <div ref={mainElement} className="grid" tabIndex={-1}>
+          <div ref={mainElement} className="content-container" tabIndex={-1}>
             <section
               className="print:hidden"
               aria-labelledby={headingIdentifier}
@@ -236,14 +236,16 @@ export function PlanerPage() {
               />
             </section>
 
-            <Button
-              type="button"
-              buttonStyle="secondary"
-              className="my-16 justify-self-start print:hidden"
-              onClick={navigateToBeispielePage}
-            >
-              <ChevronLeftIcon /> Zurück zur Auswahl
-            </Button>
+            <div>
+              <Button
+                type="button"
+                buttonStyle="secondary"
+                className="my-16 justify-self-start print:hidden"
+                onClick={navigateToBeispielePage}
+              >
+                <ChevronLeftIcon /> Zurück zur Auswahl
+              </Button>
+            </div>
 
             {!!showFeedbackForm && (
               <UserFeedbackForm

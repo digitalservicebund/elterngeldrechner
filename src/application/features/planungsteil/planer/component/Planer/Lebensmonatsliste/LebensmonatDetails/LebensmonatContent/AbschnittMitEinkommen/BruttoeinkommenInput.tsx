@@ -66,10 +66,10 @@ export function BruttoeinkommenInput({
         className={classNames(
           "appearance-none px-24 py-10",
           "border-2 border-solid",
-          imMutterschutz
-            ? "cursor-not-allowed border-grey-dark"
-            : "border-Basis",
-          isMissing ? "border-warning" : "border-Basis",
+          {
+            "cursor-not-allowed border-grey-dark": imMutterschutz,
+            "border-warning": isMissing,
+          },
         )}
         aria-label={ariaLabel}
         aria-describedby={ariaDescribedBy}

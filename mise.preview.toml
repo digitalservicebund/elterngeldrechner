@@ -1,0 +1,6 @@
+# A preview publishes a branch to a subdirectory of the staging bucket, so this
+# layers on top of another environment: MISE_ENV=staging,preview.
+
+[env]
+VITE_BASE_PATH = "https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/{{ env.PREVIEW_NAME }}/"
+VITE_FEATURE_FLAG_POSTHOG_TESTING = "true"

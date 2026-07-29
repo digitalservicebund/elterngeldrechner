@@ -27,6 +27,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: staging
+    env:
+      MISE_ENV: staging,preview
+      PREVIEW_NAME: ${{ inputs.name }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
@@ -43,10 +46,8 @@ jobs:
         if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
         run: scripts/generate-app-wrapper.sh || echo "::warning::app-wrapper fetch failed; preview will use the bare host page"
 
-      - name: Run preview build specific for stack it staging environment
-        run: npm run build:staging
-        env:
-          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/${{ inputs.name }}/
+      - name: Build the widget for the preview
+        run: mise run build
 
       - name: Check build artifact structure
         run: scripts/check-build-artifacts.sh
@@ -55,9 +56,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-          AWS_ENDPOINT_URL: https://object.storage.eu01.onstackit.cloud
-          PREVIEW_NAME: ${{ inputs.name }}
-        run: aws s3 sync dist/ "s3://egr-assets-staging/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+        run: aws s3 sync dist/ "s3://${EGR_BUCKET}/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
       - name: Add Preview Link to Summary
         if: success()

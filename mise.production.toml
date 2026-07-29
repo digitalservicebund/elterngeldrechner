@@ -1,0 +1,9 @@
+# Configuration of the STACKIT production environment, loaded with MISE_ENV=production.
+
+[env]
+EGR_BUILD_MODE = "production"
+EGR_BUCKET = "egr-assets-production"
+
+VITE_BASE_PATH = "https://egr-assets-production.object.storage.eu01.onstackit.cloud/"
+VITE_PUBLIC_POSTHOG_PROJECT_TOKEN = "phc_rUbW5TOq15FHTu5PoKh3g4uCJNNN7MvHu2WJPUIjEpa"
+VITE_PUBLIC_POSTHOG_HOST = "https://ph-proxy.prod.tech.digitalservice.dev"

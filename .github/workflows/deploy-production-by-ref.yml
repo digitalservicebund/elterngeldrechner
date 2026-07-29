@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-24.04
     environment: production
     timeout-minutes: 20
+    env:
+      MISE_ENV: production
 
     steps:
       - name: Checkout ref
@@ -30,13 +32,10 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
-      - name: Run build specific for stack it production environment
-        run: npm run build:production
+      - name: Build the widget for the production environment
+        run: mise run build
         env:
-          VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud/
           VITE_BUILD_VERSION: ${{ github.sha }}
-          VITE_PUBLIC_POSTHOG_HOST: https://ph-proxy.prod.tech.digitalservice.dev
-          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: phc_rUbW5TOq15FHTu5PoKh3g4uCJNNN7MvHu2WJPUIjEpa
 
       - name: Check build artifact structure
         run: scripts/check-build-artifacts.sh
@@ -45,10 +44,9 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-          AWS_ENDPOINT_URL: https://object.storage.eu01.onstackit.cloud
         run: |
-          aws s3 sync dist/assets/ s3://egr-assets-production/assets/ --exclude "index-*.js"
-          aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          aws s3 sync dist/assets/ "s3://${EGR_BUCKET}/assets/" --exclude "index-*.js"
+          aws s3 cp dist/assets/index-*.js "s3://${EGR_BUCKET}/index.js" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
       - name: Track deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

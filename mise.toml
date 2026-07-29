@@ -7,6 +7,9 @@ node = "24.18.0"
 actionlint = "1.7.12"
 lychee = "0.24.2"
 
+[env]
+AWS_ENDPOINT_URL = "https://object.storage.eu01.onstackit.cloud"
+
 [task_config]
 includes = ["scripts"]
 
@@ -29,6 +32,10 @@ run = "npm run --silent stylelint"
 [tasks.test]
 description = "Run the vitest suite"
 run = "npm run --silent test -- --reporter=minimal"
+
+[tasks.build]
+description = "Build the widget for the environment selected with MISE_ENV"
+run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=staging or MISE_ENV=production}'
 
 [tasks.start]
 description = "Serve the widget inside the Familienportal host page snapshot"

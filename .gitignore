@@ -43,6 +43,8 @@ public/*.html
 # locally generated host-page snapshot (see scripts/generate-app-wrapper.sh)
 /.app-wrapper/
 
+/sbom.spdx.json
+
 # playwright
 /test-results/
 /playwright-report/

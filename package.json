@@ -6,7 +6,7 @@
     "src/*"
   ],
   "scripts": {
-    "start": "scripts/generate-app-wrapper.sh && vite",
+    "start": "vite",
     "build:development": "VITE_PREVIEW_BANNER=true vite build --mode development",
     "build:production": "VITE_PREVIEW_BANNER=true vite build --mode production",
     "build:staging": "VITE_PREVIEW_BANNER=true vite build --mode staging",

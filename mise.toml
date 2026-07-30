@@ -44,6 +44,7 @@ run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=sta
 
 [tasks.start]
 description = "Serve the widget inside the Familienportal host page snapshot"
+depends = ["generate-app-wrapper"]
 run = "npm start"
 
 [tasks.audit]

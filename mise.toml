@@ -52,8 +52,8 @@ depends = ["audit-licenses", "audit-vulnerabilities"]
 
 [tasks.audit-licenses]
 description = "Check dependency licences against ./allowed-licenses"
-run = "npm run audit-licenses"
+run = "npm run --silent audit-licenses"
 
 [tasks.audit-vulnerabilities]
 description = "Scan the working tree for known vulnerabilities with trivy"
-run = "trivy filesystem . --severity HIGH,CRITICAL --exit-code 1"
+run = "trivy --quiet filesystem . --severity HIGH,CRITICAL --exit-code 1"

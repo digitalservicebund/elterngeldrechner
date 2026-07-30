@@ -10,6 +10,7 @@ lychee = "0.24.2"
 
 [tools.trivy]
 version = "0.72.0"
+minimum_release_age = "1d"
 
 [env]
 AWS_ENDPOINT_URL = "https://object.storage.eu01.onstackit.cloud"

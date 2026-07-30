@@ -20,6 +20,8 @@ pre-commit:
       run: npm run type-check
     audit-licenses:
       run: npm run audit-licenses
+    secret-scan:
+      run: trivy --quiet filesystem . --scanners secret --skip-files "**/.env*" --exit-code 1
     github-actions-lint:
       glob: ".github/workflows/*"
       run: actionlint {staged_files}

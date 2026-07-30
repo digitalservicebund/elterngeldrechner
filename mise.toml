@@ -8,6 +8,9 @@ node = "24.18.0"
 actionlint = "1.7.12"
 lychee = "0.24.2"
 
+[tools.trivy]
+version = "0.72.0"
+
 [env]
 AWS_ENDPOINT_URL = "https://object.storage.eu01.onstackit.cloud"
 
@@ -45,3 +48,7 @@ run = "npm start"
 [tasks.audit-licenses]
 description = "Check dependency licences against ./allowed-licenses"
 run = "npm run audit-licenses"
+
+[tasks.audit-vulnerabilities]
+description = "Scan the working tree for known vulnerabilities with trivy"
+run = "trivy filesystem . --severity HIGH,CRITICAL --exit-code 1"

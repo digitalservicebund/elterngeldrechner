@@ -12,4 +12,8 @@ function isPosthogTestingEnabled() {
   return import.meta.env.VITE_FEATURE_FLAG_POSTHOG_TESTING === "true";
 }
 
-export { isPosthogTestingEnabled };
+function isNewIncomeFlowEnabled() {
+  return import.meta.env.VITE_FEATURE_FLAG_INCOME_FLOW === "true";
+}
+
+export { isPosthogTestingEnabled, isNewIncomeFlowEnabled };

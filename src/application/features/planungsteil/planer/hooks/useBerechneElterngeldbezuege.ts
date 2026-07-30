@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
-import { erstelleFinanzdatenAllerElternteile } from "@/application/features/abfrageteil/domain/erstelleFinanzdaten";
-import { erstellePersoenlicheDatenAllerElternteile } from "@/application/features/abfrageteil/domain/erstellePersoenlicheDaten";
+import { erstelleFinanzdatenAllerElternteile } from "@/application/feature-flags/useNewIncomeFlow";
+import { erstellePersoenlicheDatenAllerElternteile } from "@/application/feature-flags/useNewIncomeFlow";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { FormEvent } from "@/application/routing";
 import {
@@ -258,7 +258,7 @@ if (import.meta.vitest) {
       });
 
       vi.spyOn(
-        await import("@/application/features/abfrageteil/domain/erstellePersoenlicheDaten"),
+        await import("@/application/feature-flags/useNewIncomeFlow"),
         "erstellePersoenlicheDatenAllerElternteile",
       ).mockReturnValue({
         anzahlElternteile: 1,
@@ -266,7 +266,7 @@ if (import.meta.vitest) {
       });
 
       vi.spyOn(
-        await import("@/application/features/abfrageteil/domain/erstelleFinanzdaten"),
+        await import("@/application/feature-flags/useNewIncomeFlow"),
         "erstelleFinanzdatenAllerElternteile",
       ).mockReturnValue({
         anzahlElternteile: 1,

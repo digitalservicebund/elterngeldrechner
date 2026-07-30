@@ -4,6 +4,8 @@ import { Route } from "./Route";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { generateParametrizedPath } from "./generatePath/generateParametrizedPath";
 import { Steuerklasse } from "@/elterngeldrechner";
+import { isNewIncomeFlowEnabled } from "../feature-flags";
+import { elternteilTaetigkeitenAbfrageRoute } from "../feature-flags/useNewIncomeFlow";
 
 export function findeNaechstenPfad(event: FormEvent): string {
   const subpath = getNextSubpath(event);
@@ -85,7 +87,7 @@ function getNextSubpath(event: FormEvent): string {
           },
         );
       }
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -104,7 +106,7 @@ function getNextSubpath(event: FormEvent): string {
           },
         );
       }
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -147,7 +149,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -180,7 +182,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -210,7 +212,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -230,7 +232,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -260,6 +262,10 @@ function getNextSubpath(event: FormEvent): string {
     case Route.ElternteilTaetigkeitenBMZUebersicht: {
       const { params, dependentValues } = event;
       const taetigkeiten = dependentValues.taetigkeiten;
+
+      if (isNewIncomeFlowEnabled()) {
+        // console.log("Neue Einkommensabfrage");
+      }
 
       const zielRoute =
         taetigkeiten.istNichtSelbststaendig || taetigkeiten.istVerbeamtet
@@ -383,7 +389,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
         elternteilIndex: "1",
       });
     }

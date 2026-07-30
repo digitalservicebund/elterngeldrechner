@@ -46,6 +46,10 @@ run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=sta
 description = "Serve the widget inside the Familienportal host page snapshot"
 run = "npm start"
 
+[tasks.audit]
+description = "Collection of all audits in our project"
+depends = ["audit-licenses", "audit-vulnerabilities"]
+
 [tasks.audit-licenses]
 description = "Check dependency licences against ./allowed-licenses"
 run = "npm run audit-licenses"

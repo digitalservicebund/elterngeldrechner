@@ -5,7 +5,6 @@ import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath"
 import { generateParametrizedPath } from "./generatePath/generateParametrizedPath";
 import { Steuerklasse } from "@/elterngeldrechner";
 import { isNewIncomeFlowEnabled } from "../feature-flags";
-import { elternteilTaetigkeitenAbfrageRoute } from "../feature-flags/useNewIncomeFlow";
 
 export function findeNaechstenPfad(event: FormEvent): string {
   const subpath = getNextSubpath(event);
@@ -87,7 +86,7 @@ function getNextSubpath(event: FormEvent): string {
           },
         );
       }
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -106,7 +105,7 @@ function getNextSubpath(event: FormEvent): string {
           },
         );
       }
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -149,7 +148,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -182,7 +181,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -212,7 +211,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -232,7 +231,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
@@ -389,7 +388,7 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      return generateParametrizedPath(elternteilTaetigkeitenAbfrageRoute, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: "1",
       });
     }

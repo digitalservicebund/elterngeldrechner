@@ -1,4 +1,3 @@
-import { elternteilTaetigkeitenAbfrageRoute } from "@/application/feature-flags/useNewIncomeFlow";
 import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections";
 import type { FormEvent } from "@/application/routing/FormEvent";
 import { Route } from "@/application/routing/Route";
@@ -9,7 +8,7 @@ export function ueberpruefeErwerbstaetigkeit(
 ): boolean {
   const taetigkeiten = findeLetztesGueltigesEvent(
     events,
-    elternteilTaetigkeitenAbfrageRoute,
+    Route.ElternteilTaetigkeitenAbfrage,
     { elternteilIndex },
   );
 

@@ -1,4 +1,4 @@
-import { FormEvent, Route } from "../routing";
+import { FormEvent } from "../routing";
 import { erstelleFinanzdatenAllerElternteile as erstelleFinanzdatenAllerElternteileCurrent } from "@/application/features/abfrageteil/domain/erstelleFinanzdaten";
 import { erstellePersoenlicheDatenAllerElternteile as erstellePersoenlicheDatenAllerElternteileCurrent } from "@/application/features/abfrageteil/domain/erstellePersoenlicheDaten";
 import { erstelleFinanzdatenAllerElternteile as erstelleFinanzdatenAllerElternteileNew } from "@/application/features/abfrageteil/domain/erstelleFinanzdatenNew";
@@ -20,7 +20,3 @@ export function erstellePersoenlicheDatenAllerElternteile(events: FormEvent[]) {
 
   return erstellePersoenlicheDatenAllerElternteileCurrent(events);
 }
-
-export const elternteilTaetigkeitenAbfrageRoute = isNewIncomeFlowEnabled()
-  ? Route.ElternteilTaetigkeitenAbfrage
-  : Route.ElternteilTaetigkeitenAbfrage;

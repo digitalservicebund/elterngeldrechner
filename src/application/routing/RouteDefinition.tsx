@@ -44,6 +44,8 @@ import { PlanerPage } from "@/application/features/planungsteil/planer/PlanerPag
 import { useEffect, useRef } from "react";
 import { useNavigationType } from "react-router";
 import { posthog } from "@/application/user-tracking/posthog";
+import { isNewIncomeFlowEnabled } from "../feature-flags";
+import { ElternteilTaetigkeitenAbfragePage as ElternteilTaetigkeitenAbfragePageNew } from "@/application/features/abfrageteil/pages/elternteil/ElternteilTaetigkeitenAbfragePageNew";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -171,7 +173,11 @@ const RouteDefinition = [
             ),
           },
           {
-            element: <ElternteilTaetigkeitenAbfragePage />,
+            element: isNewIncomeFlowEnabled() ? (
+              <ElternteilTaetigkeitenAbfragePageNew />
+            ) : (
+              <ElternteilTaetigkeitenAbfragePage />
+            ),
             path: generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
           },
           {

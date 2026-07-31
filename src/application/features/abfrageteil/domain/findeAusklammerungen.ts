@@ -1,7 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { istFruehgeburt } from "./istFruehgeburt";
-import { elternteilTaetigkeitenAbfrageRoute } from "@/application/feature-flags/useNewIncomeFlow";
 import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections/findeLetztesGueltigesEvent";
 import type { FormEvent } from "@/application/routing/FormEvent";
 import { Route } from "@/application/routing/Route";
@@ -141,7 +140,7 @@ function istImMutterschutz(
 
   const taetigkeitenAbfrage = findeLetztesGueltigesEvent(
     events,
-    elternteilTaetigkeitenAbfrageRoute,
+    Route.ElternteilTaetigkeitenAbfrage,
     { elternteilIndex },
   );
 

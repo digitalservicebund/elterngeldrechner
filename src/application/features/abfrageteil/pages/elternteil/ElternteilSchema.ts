@@ -135,6 +135,29 @@ export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
 >;
 
+export const ElternteilTaetigkeitenAbfrageSchemaNew = z
+  .object({
+    istNichtSelbststaendig: z.boolean(),
+    hatMinijob: z.boolean(),
+    istSelbststaendig: z.boolean(),
+    istVerbeamtet: z.boolean(),
+    hatAndereLeistungen: z.boolean(),
+    hatPeriodenOhneEinkommen: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      return Object.values(data).some((value) => value === true);
+    },
+    {
+      message: "Bitte treffen Sie eine Auswahl.",
+      path: ["hatPeriodenOhneEinkommen"],
+    },
+  );
+
+export type ElternteilTaetigkeitenAbfrageNew = z.infer<
+  typeof ElternteilTaetigkeitenAbfrageSchemaNew
+>;
+
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 

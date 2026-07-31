@@ -32,21 +32,12 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
-      - name: Build the widget for the staging environment
-        run: mise run build
-        env:
-          VITE_BUILD_VERSION: ${{ inputs.ref }}
-
-      - name: Check build artifact structure
-        run: scripts/check-build-artifacts.sh
-
-      - name: Synchronize build output with object storage
+      - name: Deploy to the staging environment
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 sync dist/assets/ "s3://${EGR_BUCKET}/assets/" --exclude "index-*.js"
-          aws s3 cp dist/assets/index-*.js "s3://${EGR_BUCKET}/index.js" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          VITE_BUILD_VERSION: ${{ inputs.ref }}
+        run: mise run deploy
 
       - name: Track deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

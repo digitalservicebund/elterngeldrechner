@@ -46,17 +46,11 @@ jobs:
         if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
         run: scripts/generate-app-wrapper.sh || echo "::warning::app-wrapper fetch failed; preview will use the bare host page"
 
-      - name: Build the widget for the preview
-        run: mise run build
-
-      - name: Check build artifact structure
-        run: scripts/check-build-artifacts.sh
-
-      - name: Synchronize build output with object storage
+      - name: Deploy the preview
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-        run: aws s3 sync dist/ "s3://${EGR_BUCKET}/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+        run: mise run deploy
 
       - name: Add Preview Link to Summary
         if: success()

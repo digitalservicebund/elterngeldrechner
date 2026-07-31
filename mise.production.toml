@@ -3,6 +3,7 @@
 [env]
 EGR_BUILD_MODE = "production"
 EGR_BUCKET = "egr-assets-production"
+EGR_DEPLOY_LAYOUT = "root"
 
 VITE_BASE_PATH = "https://egr-assets-production.object.storage.eu01.onstackit.cloud/"
 VITE_PUBLIC_POSTHOG_PROJECT_TOKEN = "phc_rUbW5TOq15FHTu5PoKh3g4uCJNNN7MvHu2WJPUIjEpa"

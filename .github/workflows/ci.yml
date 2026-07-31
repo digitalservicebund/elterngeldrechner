@@ -76,17 +76,11 @@ jobs:
         if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
         run: scripts/generate-app-wrapper.sh || echo "::warning::app-wrapper fetch failed; preview will use the bare host page"
 
-      - name: Build the widget for the preview of the main branch
-        run: mise run build
-
-      - name: Check build artifact structure
-        run: scripts/check-build-artifacts.sh
-
-      - name: Synchronize build output with object storage
+      - name: Deploy the preview of the main branch
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-        run: aws s3 sync dist/ "s3://${EGR_BUCKET}/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+        run: mise run deploy
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0
@@ -111,21 +105,12 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
-      - name: Build the widget for the staging environment
-        run: mise run build
-        env:
-          VITE_BUILD_VERSION: ${{ github.sha }}
-
-      - name: Check build artifact structure
-        run: scripts/check-build-artifacts.sh
-
-      - name: Synchronize build output with object storage
+      - name: Deploy to the staging environment
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 sync dist/assets/ "s3://${EGR_BUCKET}/assets/" --exclude "index-*.js"
-          aws s3 cp dist/assets/index-*.js "s3://${EGR_BUCKET}/index.js" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          VITE_BUILD_VERSION: ${{ github.sha }}
+        run: mise run deploy
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0
@@ -197,21 +182,12 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
-      - name: Build the widget for the production environment
-        run: mise run build
-        env:
-          VITE_BUILD_VERSION: ${{ github.sha }}
-
-      - name: Check build artifact structure
-        run: scripts/check-build-artifacts.sh
-
-      - name: Synchronize build output with object storage
+      - name: Deploy to the production environment
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-        run: |
-          aws s3 sync dist/assets/ "s3://${EGR_BUCKET}/assets/" --exclude "index-*.js"
-          aws s3 cp dist/assets/index-*.js "s3://${EGR_BUCKET}/index.js" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          VITE_BUILD_VERSION: ${{ github.sha }}
+        run: mise run deploy
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0

@@ -32,6 +32,9 @@ fi
 
 NEXT=$(( LATEST + 1 ))
 
+echo "These commits would go into release $NEXT:"
+git-cliff --unreleased
+
 read -p "Do you want to create and push version $NEXT? (y/n): " confirm
 if [[ $confirm != [yY] ]]; then
     echo "Abort."

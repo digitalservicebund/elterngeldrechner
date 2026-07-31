@@ -6,6 +6,9 @@ minimum_release_age = "7d"
 node = "24.18.0"
 
 actionlint = "1.7.12"
+awscli = "2.36.13"
+git-cliff = "2.13.1"
+jq = "1.8.2"
 lychee = "0.24.2"
 
 [tools.trivy]
@@ -68,3 +71,7 @@ run = "trivy --quiet filesystem . --include-dev-deps --severity HIGH,CRITICAL --
 [tasks.generate-sbom]
 description = "Write a software bill of materials to sbom.spdx.json"
 run = "trivy --quiet filesystem . --include-dev-deps --format spdx-json --output sbom.spdx.json"
+
+[tasks.release-notes]
+description = "Render the changelog of the most recent tag to stdout"
+run = "git-cliff --latest"

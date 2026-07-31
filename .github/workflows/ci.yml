@@ -53,9 +53,6 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: staging
-    env:
-      MISE_ENV: staging,preview
-      PREVIEW_NAME: main
     needs:
       - test-suite-vitest
       - static-code-analysis
@@ -65,22 +62,19 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
+      # Only the cache lives here; fetching the snapshot on a miss is part of
+      # `deploy --preview`, which refuses to publish without it.
       - name: Restore cached app-wrapper snapshot
-        id: app-wrapper-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 #v6.1.0
         with:
           path: .app-wrapper
           key: app-wrapper-snapshot
 
-      - name: Generate app-wrapper snapshot on cache miss
-        if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
-        run: scripts/generate-app-wrapper.sh || echo "::warning::app-wrapper fetch failed; preview will use the bare host page"
-
       - name: Deploy the preview of the main branch
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-        run: mise run deploy
+        run: mise run deploy --preview --name main
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0
@@ -94,8 +88,6 @@ jobs:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     environment: staging
-    env:
-      MISE_ENV: staging
     needs:
       - test-suite-vitest
       - static-code-analysis
@@ -110,7 +102,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           VITE_BUILD_VERSION: ${{ github.sha }}
-        run: mise run deploy
+        run: mise run deploy --staging
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0
@@ -171,8 +163,6 @@ jobs:
     runs-on: ubuntu-24.04
     if: startsWith(github.event.ref, 'refs/tags/')
     environment: production
-    env:
-      MISE_ENV: production
     needs:
       - test-suite-vitest
       - static-code-analysis
@@ -187,7 +177,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           VITE_BUILD_VERSION: ${{ github.sha }}
-        run: mise run deploy
+        run: mise run deploy --production
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0

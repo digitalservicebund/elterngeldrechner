@@ -42,10 +42,11 @@ run = "npm run --silent test -- --reporter=minimal"
 description = "Build the widget for the environment selected with MISE_ENV"
 run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=staging or MISE_ENV=production}'
 
-[tasks.deploy]
-description = "Build, verify and upload into the bucket of the environment selected with MISE_ENV"
-depends = ["build"]
+[tasks.publish]
+hide = true # Reached through scripts/deploy.sh, which selects the environment first.
+description = "Build, verify and upload into the bucket of the selected environment"
 run = ["scripts/check-build-artifacts.sh", "scripts/upload-build.sh"]
+depends = ["build"]
 
 [tasks.start]
 description = "Serve the widget inside the Familienportal host page snapshot"

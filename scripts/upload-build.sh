@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-#MISE description="Upload dist/ into the bucket of the environment selected with MISE_ENV"
+#MISE description="Upload dist/ into the bucket of the selected environment"
+#MISE hide=true
 
 # Publish the build to STACKIT object storage.
 #

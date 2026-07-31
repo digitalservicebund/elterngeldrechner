@@ -37,6 +37,9 @@ case "$EGR_DEPLOY_LAYOUT" in
   preview)
     : "${PREVIEW_NAME:?a preview needs PREVIEW_NAME to know its subdirectory}"
     aws s3 sync dist/ "s3://${EGR_BUCKET}/preview/${PREVIEW_NAME}" --cache-control "$never_cache"
+    # The base path the bundle was built with is where the page now lives, so it
+    # is also the only place the URL has to be spelled out.
+    echo "Preview published: ${VITE_BASE_PATH}index.html"
     ;;
   *)
     echo "Unknown EGR_DEPLOY_LAYOUT '${EGR_DEPLOY_LAYOUT}', expected 'root' or 'preview'." >&2

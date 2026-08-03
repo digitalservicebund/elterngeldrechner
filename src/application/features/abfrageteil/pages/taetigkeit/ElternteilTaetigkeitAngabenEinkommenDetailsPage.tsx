@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Temporal } from "@js-temporal/polyfill";
-import { useId, useMemo } from "react";
+import { useId } from "react";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -8,9 +7,8 @@ import {
   TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { AusklammerungsZeitraumBox } from "@/application/features/abfrageteil/pages/taetigkeit/AusklammerungsZeitraumBox";
+import { MonatsgenauEinkommensAbfrage } from "@/application/features/abfrageteil/pages/taetigkeit/MonatsgenauEinkommensAbfrage";
 import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
-import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
@@ -25,10 +23,6 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import {
-  Ausklammerung,
-  gruppiereBemessungszeitraum,
-} from "@/bemessungszeitraumrechner";
 import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
@@ -89,61 +83,6 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
-
-  function istGruppierterZeitabschnittAusklammerung(
-    zeitabschnitt: Temporal.PlainYearMonth[] | Ausklammerung[],
-  ): zeitabschnitt is Ausklammerung[] {
-    const ersterZeitabschnitt = zeitabschnitt[0];
-    return (
-      !!ersterZeitabschnitt &&
-      !Array.isArray(ersterZeitabschnitt) &&
-      "grund" in ersterZeitabschnitt
-    );
-  }
-
-  const zeitabschnitte = gruppiereBemessungszeitraum({
-    bemessungszeitraum,
-    ausklammerungen,
-  });
-
-  const { gruppierteZeitabschnitte, alleEinkommensMonate } = useMemo(() => {
-    const initialAcc = {
-      gruppierteZeitabschnitte: [] as Array<
-        Temporal.PlainYearMonth[] | Ausklammerung[]
-      >,
-      alleEinkommensMonate: [] as Temporal.PlainYearMonth[],
-    };
-
-    const result = zeitabschnitte.reduce((acc, curr) => {
-      const lastGroup =
-        acc.gruppierteZeitabschnitte[acc.gruppierteZeitabschnitte.length - 1];
-
-      if (Array.isArray(curr)) {
-        acc.gruppierteZeitabschnitte.push(curr);
-        acc.alleEinkommensMonate.push(...curr);
-      } else {
-        if (lastGroup && istGruppierterZeitabschnittAusklammerung(lastGroup)) {
-          lastGroup.push(curr);
-        } else {
-          acc.gruppierteZeitabschnitte.push([curr]);
-        }
-      }
-
-      return acc;
-    }, initialAcc);
-
-    return {
-      gruppierteZeitabschnitte: result.gruppierteZeitabschnitte,
-      alleEinkommensMonate: result.alleEinkommensMonate,
-    };
-  }, [zeitabschnitte]);
-
-  const berechneMonatsindex = (
-    aktuellerMonat: Temporal.PlainYearMonth,
-    alleMonate: Temporal.PlainYearMonth[],
-  ): number => {
-    return alleMonate.findIndex((monat) => monat.equals(aktuellerMonat));
-  };
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
@@ -211,38 +150,11 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
             }
           />
 
-          {gruppierteZeitabschnitte.map((zeitabschnitt, index) => {
-            if (istGruppierterZeitabschnittAusklammerung(zeitabschnitt)) {
-              return (
-                <div key={index}>
-                  <AusklammerungsZeitraumBox ausklammerungen={zeitabschnitt} />
-                </div>
-              );
-            }
-
-            return (
-              <div key={index} className="bg-off-white p-40 pt-32">
-                <div className="input-container pl-8">
-                  {zeitabschnitt.map((month) => {
-                    const monatsIndex = berechneMonatsindex(
-                      month,
-                      alleEinkommensMonate,
-                    );
-                    const label = `${month.toPlainDate({ day: 1 }).toLocaleString("de-DE", { month: "long", year: "numeric" })} Brutto-Einkommen`;
-
-                    return (
-                      <CurrencyInput
-                        control={control}
-                        name={`monatsbrutto.${monatsIndex}`}
-                        key={month.toString()}
-                        label={label}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
+          <MonatsgenauEinkommensAbfrage
+            bemessungszeitraum={bemessungszeitraum}
+            ausklammerungen={ausklammerungen}
+            control={control}
+          />
         </div>
 
         <div className="button-group">

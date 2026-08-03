@@ -252,12 +252,15 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenSelbststaendigAngaben),
     params: SelbststaendigParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitSelbststaendigAngabenSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenSelbststaendigWeitere),
     params: SelbststaendigParams,
-    payload: z.never().optional(),
+    payload: WeitereTaetigkeitAbfrageSchema,
+    dependentValues: z.object({
+      wirdZweitePersonBeruecksichtigt: z.boolean(),
+    }),
   }),
 
   // Bisherige Einkommensabfrage

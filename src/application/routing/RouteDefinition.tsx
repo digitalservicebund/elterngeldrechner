@@ -46,6 +46,8 @@ import { useNavigationType } from "react-router";
 import { posthog } from "@/application/user-tracking/posthog";
 import { isNewIncomeFlowEnabled } from "../feature-flags";
 import { ElternteilTaetigkeitenAbfragePage as ElternteilTaetigkeitenAbfragePageNew } from "@/application/features/abfrageteil/pages/elternteil/ElternteilTaetigkeitenAbfragePageNew";
+import { ElternteilTaetigkeitenSelbststaendigAngabenPage } from "../features/abfrageteil/pages/taetigkeit/selbststaendig/ElternteilTaetigkeitenSelbststaendigAngabenPage";
+import { ElternteilTaetigkeitenSelbststaendigWeiterePage } from "../features/abfrageteil/pages/taetigkeit/selbststaendig/ElternteilTaetigkeitenSelbststaendigWeiterePage";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -186,6 +188,9 @@ const RouteDefinition = [
               Route.ElternteilTaetigkeitenBMZUebersicht,
             ),
           },
+
+          // Tätigkeiten
+          // Tätigkeiten bestehender Flow
           {
             element: <ElternteilTaetigkeitAngabenSelbststaendigPage />,
             path: generateAbfrageteilPath(
@@ -234,6 +239,22 @@ const RouteDefinition = [
               Route.ElternteilWeitereTaetigkeitAngaben,
             ),
           },
+
+          // Tätigkeiten selbstständig
+          {
+            element: <ElternteilTaetigkeitenSelbststaendigAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenSelbststaendigAngaben,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenSelbststaendigWeiterePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenSelbststaendigWeitere,
+            ),
+          },
+
+          // Elternteil Zwei
           {
             element: <ElternteilZweiAllgemeineAngabenPage />,
             path: generateAbfrageteilPath(

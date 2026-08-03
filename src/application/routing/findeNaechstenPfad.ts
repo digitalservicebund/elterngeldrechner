@@ -243,6 +243,7 @@ function getNextSubpath(event: FormEvent): string {
 
       const hatErwerbstaetigkeit =
         payload.istNichtSelbststaendig ||
+        payload.hatMinijob === true ||
         payload.istSelbststaendig ||
         payload.istVerbeamtet;
 
@@ -266,7 +267,7 @@ function getNextSubpath(event: FormEvent): string {
       const taetigkeiten = dependentValues.taetigkeiten;
 
       if (isNewIncomeFlowEnabled()) {
-        if (taetigkeiten.istNichtSelbststaendig) {
+        if (taetigkeiten.istNichtSelbststaendig || taetigkeiten.istVerbeamtet) {
           return generateParametrizedPath(
             Route.ElternteilTaetigkeitenAngestelltHauptjob,
             {
@@ -330,9 +331,30 @@ function getNextSubpath(event: FormEvent): string {
 
     // Tätigkeiten selbstständig
     case Route.ElternteilTaetigkeitenSelbststaendigAngaben:
-      return "WIP";
-    case Route.ElternteilTaetigkeitenSelbststaendigWeitere:
-      return "WIP";
+      return generateParametrizedPath(
+        Route.ElternteilTaetigkeitenSelbststaendigWeitere,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+          selbststaendigIndex: event.params.selbststaendigIndex.toString(),
+        },
+      );
+    case Route.ElternteilTaetigkeitenSelbststaendigWeitere: {
+      const { payload, dependentValues, params } = event;
+      if (!payload.istWeitereTaetigkeitVorhanden) {
+        return !dependentValues.wirdZweitePersonBeruecksichtigt ||
+          event.params.elternteilIndex === 1
+          ? "DONE"
+          : Route.ElternteilZweiAllgemeineAngaben;
+      }
+
+      return generateParametrizedPath(
+        Route.ElternteilTaetigkeitenSelbststaendigAngaben,
+        {
+          elternteilIndex: params.elternteilIndex.toString(),
+          selbststaendigIndex: (params.selbststaendigIndex + 1).toString(),
+        },
+      );
+    }
 
     // Tätigkeiten bisherige Einkommensabfrage
     case Route.ElternteilTaetigkeitAngabenSelbststaendig:
@@ -1096,6 +1118,29 @@ if (import.meta.vitest) {
         );
       });
 
+      it("returns ElternteilTaetigkeitenBMZUebersicht given ElternteilTaetigkeitenAbfrage as currentRoute and only hatMinijob true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: false,
+            hatMinijob: true,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/bmz",
+        );
+      });
+
       it("returns ElternteilTaetigkeitenBMZUebersicht given ElternteilTaetigkeitenAbfrage as currentRoute and elternteilIndex 1", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
@@ -1381,6 +1426,108 @@ if (import.meta.vitest) {
             "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/0/angaben",
           );
         });
+      });
+    });
+
+    describe("ElternteilTaetigkeitenSelbststaendigAngaben", () => {
+      it("returns ElternteilTaetigkeitenSelbststaendigWeitere given ElternteilTaetigkeitenSelbststaendigAngaben as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenSelbststaendigAngaben,
+          params: { elternteilIndex: 0, selbststaendigIndex: 0 },
+          payload: {
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            bruttoJahresgewinn: 10000,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/0/weitere",
+        );
+      });
+
+      it("carries the selbststaendigIndex through to ElternteilTaetigkeitenSelbststaendigWeitere", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenSelbststaendigAngaben,
+          params: { elternteilIndex: 0, selbststaendigIndex: 2 },
+          payload: {
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            bruttoJahresgewinn: 10000,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/2/weitere",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitenSelbststaendigWeitere", () => {
+      it("returns ElternteilTaetigkeitenSelbststaendigAngaben for the next selbststaendigIndex given istWeitereTaetigkeitVorhanden true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenSelbststaendigWeitere,
+          params: { elternteilIndex: 0, selbststaendigIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: true,
+          },
+          dependentValues: {
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/1/angaben",
+        );
+      });
+
+      it("returns ElternteilZweiAllgemeineAngaben given istWeitereTaetigkeitVorhanden false and wirdZweitePersonBeruecksichtigt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenSelbststaendigWeitere,
+          params: { elternteilIndex: 0, selbststaendigIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
+      });
+
+      it("returns /beispiele given istWeitereTaetigkeitVorhanden false and wirdZweitePersonBeruecksichtigt false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenSelbststaendigWeitere,
+          params: { elternteilIndex: 0, selbststaendigIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
+      });
+
+      it("returns /beispiele given istWeitereTaetigkeitVorhanden false, elternteilIndex 1 and wirdZweitePersonBeruecksichtigt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenSelbststaendigWeitere,
+          params: { elternteilIndex: 1, selbststaendigIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
       });
     });
 

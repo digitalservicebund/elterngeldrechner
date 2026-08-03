@@ -128,7 +128,8 @@ export function ElternteilBMZUebersichtPage() {
                 <BMZZusammensetzungSelbststaendig
                   istMischeinkunft={
                     taetigkeiten.istNichtSelbststaendig ||
-                    taetigkeiten.istVerbeamtet
+                    taetigkeiten.istVerbeamtet ||
+                    taetigkeiten.hatMinijob === true
                   }
                   vorname={vorname}
                   bemessungszeitraum={bemessungszeitraum}

@@ -16,10 +16,16 @@ export function ueberpruefeErwerbstaetigkeit(
     return false;
   }
 
-  const { istNichtSelbststaendig, istSelbststaendig, istVerbeamtet } =
-    taetigkeiten;
+  const {
+    istNichtSelbststaendig,
+    hatMinijob,
+    istSelbststaendig,
+    istVerbeamtet,
+  } = taetigkeiten;
 
-  return istNichtSelbststaendig || istSelbststaendig || istVerbeamtet;
+  return Boolean(
+    istNichtSelbststaendig || hatMinijob || istSelbststaendig || istVerbeamtet,
+  );
 }
 
 if (import.meta.vitest) {
@@ -146,6 +152,29 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istNichtSelbststaendig: false,
             istVerbeamtet: true,
+            hatAndereLeistungen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        },
+      ];
+
+      expect(ueberpruefeErwerbstaetigkeit(events, 0)).toEqual(true);
+    });
+
+    it("returns true if only hatMinijob true", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatPeriodenOhneEinkommen: false,
+            istSelbststaendig: false,
+            istNichtSelbststaendig: false,
+            hatMinijob: true,
+            istVerbeamtet: false,
             hatAndereLeistungen: false,
           },
           dependentValues: {

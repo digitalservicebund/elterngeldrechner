@@ -3,6 +3,7 @@ import type { ElternteilTaetigkeitenAbfrage } from "./ElternteilSchema";
 export type Einkommensart =
   | "Selbstständig"
   | "Angestellt"
+  | "Minijob"
   | "Beamte"
   | "Sozial- oder Lohnersatzleistungen"
   | "Kein Einkommen";
@@ -18,6 +19,10 @@ export function bestimmeEinkommensarten(
 
   if (taetigkeiten.istNichtSelbststaendig) {
     einkommensarten.push("Angestellt");
+  }
+
+  if (taetigkeiten.hatMinijob) {
+    einkommensarten.push("Minijob");
   }
 
   if (taetigkeiten.istVerbeamtet) {

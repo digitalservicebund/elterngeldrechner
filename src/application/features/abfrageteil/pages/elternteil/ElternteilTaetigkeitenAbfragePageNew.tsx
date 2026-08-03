@@ -3,8 +3,8 @@ import { useId } from "react";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
-  ElternteilTaetigkeitenAbfrageNew as ElternteilTaetigkeitenAbfrage,
-  ElternteilTaetigkeitenAbfrageSchemaNew as ElternteilTaetigkeitenAbfrageSchema,
+  ElternteilTaetigkeitenAbfrage,
+  ElternteilTaetigkeitenAbfrageSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/CustomCheckbox";

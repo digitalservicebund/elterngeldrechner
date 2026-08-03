@@ -116,6 +116,10 @@ export type ElternteilAusklammerungMutterschutzGeschwisterkindZeiten = z.infer<
 export const ElternteilTaetigkeitenAbfrageSchema = z
   .object({
     istNichtSelbststaendig: z.boolean(),
+    // Nur auf der neuen Tätigkeiten-Seite (ElternteilTaetigkeitenAbfragePageNew)
+    // als eigene Checkbox abgefragt => isNewIncomeFlowEnabled;
+    // im alten Fluss immer undefined/falsy.
+    hatMinijob: z.boolean().optional(),
     istSelbststaendig: z.boolean(),
     istVerbeamtet: z.boolean(),
     hatAndereLeistungen: z.boolean(),
@@ -133,29 +137,6 @@ export const ElternteilTaetigkeitenAbfrageSchema = z
 
 export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
->;
-
-export const ElternteilTaetigkeitenAbfrageSchemaNew = z
-  .object({
-    istNichtSelbststaendig: z.boolean(),
-    hatMinijob: z.boolean(),
-    istSelbststaendig: z.boolean(),
-    istVerbeamtet: z.boolean(),
-    hatAndereLeistungen: z.boolean(),
-    hatPeriodenOhneEinkommen: z.boolean(),
-  })
-  .refine(
-    (data) => {
-      return Object.values(data).some((value) => value === true);
-    },
-    {
-      message: "Bitte treffen Sie eine Auswahl.",
-      path: ["hatPeriodenOhneEinkommen"],
-    },
-  );
-
-export type ElternteilTaetigkeitenAbfrageNew = z.infer<
-  typeof ElternteilTaetigkeitenAbfrageSchemaNew
 >;
 
 if (import.meta.vitest) {

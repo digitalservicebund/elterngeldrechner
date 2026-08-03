@@ -42,6 +42,21 @@ const AusklammerungParams = z.object({
   geschwisterIndex: z.number(),
 });
 
+const AngestelltParams = z.object({
+  elternteilIndex: z.number(),
+  angestelltIndex: z.number(),
+});
+
+const MinijobParams = z.object({
+  elternteilIndex: z.number(),
+  minijobIndex: z.number(),
+});
+
+const SelbststaendigParams = z.object({
+  elternteilIndex: z.number(),
+  selbststaendigIndex: z.number(),
+});
+
 const TaetigkeitParams = z.object({
   elternteilIndex: z.number(),
   taetigkeitIndex: z.number(),
@@ -181,6 +196,71 @@ export const FormEventSchema = z.discriminatedUnion("route", [
       taetigkeiten: ElternteilTaetigkeitenAbfrageSchema,
     }),
   }),
+
+  // Angestellt
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenAngestelltHauptjob),
+    params: AngestelltParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenAngestelltAngaben),
+    params: AngestelltParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenAngestelltEinkommen),
+    params: AngestelltParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(
+      Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert,
+    ),
+    params: AngestelltParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenAngestelltWeitere),
+    params: AngestelltParams,
+    payload: z.never().optional(),
+  }),
+
+  // Minijob
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenMinijobAngaben),
+    params: MinijobParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenMinijobEinkommen),
+    params: MinijobParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert),
+    params: MinijobParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenMinijobWeiterer),
+    params: MinijobParams,
+    payload: z.never().optional(),
+  }),
+
+  // Selbstständig
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenSelbststaendigAngaben),
+    params: SelbststaendigParams,
+    payload: z.never().optional(),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilTaetigkeitenSelbststaendigWeitere),
+    params: SelbststaendigParams,
+    payload: z.never().optional(),
+  }),
+
+  // Bisherige Einkommensabfrage
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitAngabenSelbststaendig),
     params: TaetigkeitParams,

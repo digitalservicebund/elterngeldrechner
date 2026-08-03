@@ -235,6 +235,9 @@ function getNextSubpath(event: FormEvent): string {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
+
+    // Tätigkeiten
+    // Tätigkeiten allgemein
     case Route.ElternteilTaetigkeitenAbfrage: {
       const { payload, dependentValues } = event;
 
@@ -263,7 +266,33 @@ function getNextSubpath(event: FormEvent): string {
       const taetigkeiten = dependentValues.taetigkeiten;
 
       if (isNewIncomeFlowEnabled()) {
-        // console.log("Neue Einkommensabfrage");
+        if (taetigkeiten.istNichtSelbststaendig) {
+          return generateParametrizedPath(
+            Route.ElternteilTaetigkeitenAngestelltHauptjob,
+            {
+              elternteilIndex: params.elternteilIndex.toString(),
+              angestelltIndex: "0",
+            },
+          );
+        }
+
+        if (taetigkeiten.hatMinijob) {
+          return generateParametrizedPath(
+            Route.ElternteilTaetigkeitenMinijobAngaben,
+            {
+              elternteilIndex: params.elternteilIndex.toString(),
+              minijobIndex: "0",
+            },
+          );
+        }
+
+        return generateParametrizedPath(
+          Route.ElternteilTaetigkeitenSelbststaendigAngaben,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            selbststaendigIndex: "0",
+          },
+        );
       }
 
       const zielRoute =
@@ -276,6 +305,36 @@ function getNextSubpath(event: FormEvent): string {
         taetigkeitIndex: "0",
       });
     }
+
+    // Tätigkeiten angestellt
+    case Route.ElternteilTaetigkeitenAngestelltHauptjob:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenAngestelltAngaben:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenAngestelltEinkommen:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenAngestelltWeitere:
+      return "WIP";
+
+    // Tätigkeiten Minijob
+    case Route.ElternteilTaetigkeitenMinijobAngaben:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenMinijobEinkommen:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenMinijobWeiterer:
+      return "WIP";
+
+    // Tätigkeiten selbstständig
+    case Route.ElternteilTaetigkeitenSelbststaendigAngaben:
+      return "WIP";
+    case Route.ElternteilTaetigkeitenSelbststaendigWeitere:
+      return "WIP";
+
+    // Tätigkeiten bisherige Einkommensabfrage
     case Route.ElternteilTaetigkeitAngabenSelbststaendig:
       return generateParametrizedPath(
         Route.ElternteilWeitereTaetigkeitAbfrage,
@@ -1224,6 +1283,104 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig",
         );
+      });
+
+      describe("wenn der neue Einkommensfluss aktiv ist", () => {
+        beforeEach(() => {
+          vi.stubEnv("VITE_FEATURE_FLAG_INCOME_FLOW", "true");
+        });
+
+        afterEach(() => {
+          vi.unstubAllEnvs();
+        });
+
+        it("returns ElternteilTaetigkeitenAngestelltHauptjob given istNichtSelbststaendig true", () => {
+          const naechsterPfad = findeNaechstenPfad({
+            route: Route.ElternteilTaetigkeitenBMZUebersicht,
+            params: { elternteilIndex: 0 },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+              taetigkeiten: {
+                istNichtSelbststaendig: true,
+                hatMinijob: false,
+                istSelbststaendig: false,
+                istVerbeamtet: false,
+                hatAndereLeistungen: false,
+                hatPeriodenOhneEinkommen: false,
+              },
+            },
+          });
+
+          expect(naechsterPfad).toEqual(
+            "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/hauptjob",
+          );
+        });
+
+        it("returns ElternteilTaetigkeitenAngestelltHauptjob given istNichtSelbststaendig and hatMinijob both true", () => {
+          const naechsterPfad = findeNaechstenPfad({
+            route: Route.ElternteilTaetigkeitenBMZUebersicht,
+            params: { elternteilIndex: 0 },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+              taetigkeiten: {
+                istNichtSelbststaendig: true,
+                hatMinijob: true,
+                istSelbststaendig: false,
+                istVerbeamtet: false,
+                hatAndereLeistungen: false,
+                hatPeriodenOhneEinkommen: false,
+              },
+            },
+          });
+
+          expect(naechsterPfad).toEqual(
+            "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/hauptjob",
+          );
+        });
+
+        it("returns ElternteilTaetigkeitenMinijobAngaben given only hatMinijob true", () => {
+          const naechsterPfad = findeNaechstenPfad({
+            route: Route.ElternteilTaetigkeitenBMZUebersicht,
+            params: { elternteilIndex: 0 },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+              taetigkeiten: {
+                istNichtSelbststaendig: false,
+                hatMinijob: true,
+                istSelbststaendig: false,
+                istVerbeamtet: false,
+                hatAndereLeistungen: false,
+                hatPeriodenOhneEinkommen: false,
+              },
+            },
+          });
+
+          expect(naechsterPfad).toEqual(
+            "/abfrageteil/elternteil/0/finanzielles/taetigkeit/minijob/0/angaben",
+          );
+        });
+
+        it("returns ElternteilTaetigkeitenSelbststaendigAngaben given neither istNichtSelbststaendig nor hatMinijob true", () => {
+          const naechsterPfad = findeNaechstenPfad({
+            route: Route.ElternteilTaetigkeitenBMZUebersicht,
+            params: { elternteilIndex: 0 },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+              taetigkeiten: {
+                istNichtSelbststaendig: false,
+                hatMinijob: false,
+                istSelbststaendig: true,
+                istVerbeamtet: false,
+                hatAndereLeistungen: false,
+                hatPeriodenOhneEinkommen: false,
+              },
+            },
+          });
+
+          expect(naechsterPfad).toEqual(
+            "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/0/angaben",
+          );
+        });
       });
     });
 

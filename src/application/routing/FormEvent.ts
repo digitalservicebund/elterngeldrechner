@@ -230,22 +230,27 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenMinijobAngaben),
     params: MinijobParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitMinijobEinkommendetailsAbfrageSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenMinijobEinkommen),
     params: MinijobParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitGleichesEinkommenAngabenSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert),
     params: MinijobParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitUnleichesEinkommenAngabenSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenMinijobWeiterer),
     params: MinijobParams,
-    payload: z.never().optional(),
+    payload: WeitereTaetigkeitAbfrageSchema,
+    dependentValues: z.object({
+      istSelbststaendigeTaetigkeitVorhanden: z.boolean(),
+      kannDurchschnittAngegebenWerden: z.boolean(),
+      wirdZweitePersonBeruecksichtigt: z.boolean(),
+    }),
   }),
 
   // Selbstständig

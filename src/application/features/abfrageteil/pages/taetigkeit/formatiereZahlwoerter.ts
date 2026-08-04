@@ -17,6 +17,13 @@ export function formatiereOrdnungszahlAlsWort(zahl: number): string {
   return ORDNUNGSZAHLEN_BIS_ZWOELF[zahl - 1] ?? `${zahl}.`;
 }
 
+export function formatiereOrdnungszahlAlsWortMaskulinAkkusativ(
+  zahl: number,
+): string {
+  const ordnungszahl = ORDNUNGSZAHLEN_BIS_ZWOELF[zahl - 1];
+  return ordnungszahl ? `${ordnungszahl}n` : `${zahl}.`;
+}
+
 const KARDINALZAHLEN_BIS_ZWOELF = [
   "eine",
   "zwei",
@@ -48,6 +55,20 @@ if (import.meta.vitest) {
 
     it("falls back to a numeral with a trailing dot beyond 12", () => {
       expect(formatiereOrdnungszahlAlsWort(13)).toBe("13.");
+    });
+  });
+
+  describe("formatiereOrdnungszahlAlsWortMaskulinAkkusativ", () => {
+    it("spells out ordinals from 1 to 12", () => {
+      expect(formatiereOrdnungszahlAlsWortMaskulinAkkusativ(1)).toBe("ersten");
+      expect(formatiereOrdnungszahlAlsWortMaskulinAkkusativ(2)).toBe("zweiten");
+      expect(formatiereOrdnungszahlAlsWortMaskulinAkkusativ(12)).toBe(
+        "zwölften",
+      );
+    });
+
+    it("falls back to a numeral with a trailing dot beyond 12, without a suffix", () => {
+      expect(formatiereOrdnungszahlAlsWortMaskulinAkkusativ(13)).toBe("13.");
     });
   });
 

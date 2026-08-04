@@ -48,6 +48,10 @@ import { isNewIncomeFlowEnabled } from "../feature-flags";
 import { ElternteilTaetigkeitenAbfragePage as ElternteilTaetigkeitenAbfragePageNew } from "@/application/features/abfrageteil/pages/elternteil/ElternteilTaetigkeitenAbfragePageNew";
 import { ElternteilTaetigkeitenSelbststaendigAngabenPage } from "../features/abfrageteil/pages/taetigkeit/selbststaendig/ElternteilTaetigkeitenSelbststaendigAngabenPage";
 import { ElternteilTaetigkeitenSelbststaendigWeiterePage } from "../features/abfrageteil/pages/taetigkeit/selbststaendig/ElternteilTaetigkeitenSelbststaendigWeiterePage";
+import { ElternteilTaetigkeitenMinijobAngabenPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobAngabenPage";
+import { ElternteilTaetigkeitenMinijobEinkommenPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobEinkommenPage";
+import { ElternteilTaetigkeitenMinijobEinkommenDetailliertPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobEinkommenDetailliertPage";
+import { ElternteilTaetigkeitenMinijobWeitererPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobWeitererPage";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -237,6 +241,32 @@ const RouteDefinition = [
             element: <ElternteilWeitereTaetigkeitAngabenPage />,
             path: generateAbfrageteilPath(
               Route.ElternteilWeitereTaetigkeitAngaben,
+            ),
+          },
+
+          // Tätigkeiten Minijob
+          {
+            element: <ElternteilTaetigkeitenMinijobAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenMinijobAngaben,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenMinijobEinkommenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenMinijobEinkommen,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenMinijobEinkommenDetailliertPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenMinijobWeitererPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenMinijobWeiterer,
             ),
           },
 

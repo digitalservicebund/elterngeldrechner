@@ -15,6 +15,7 @@ import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrage
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { kannDurchschnittAngegebenWerden as berechneKannDurchschnittAngegebenWerden } from "@/application/features/abfrageteil/domain/kannDurchschnittAngegebenWerden";
 import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -79,7 +80,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   );
   const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   const kannDurchschnittAngegebenWerden =
-    !taetigkeiten.hatPeriodenOhneEinkommen && !taetigkeiten.hatAndereLeistungen;
+    berechneKannDurchschnittAngegebenWerden(taetigkeiten);
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

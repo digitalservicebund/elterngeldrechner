@@ -5,6 +5,7 @@ import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath"
 import { generateParametrizedPath } from "./generatePath/generateParametrizedPath";
 import { Steuerklasse } from "@/elterngeldrechner";
 import { isNewIncomeFlowEnabled } from "../feature-flags";
+import { kannDurchschnittAngegebenWerden } from "../features/abfrageteil/domain/kannDurchschnittAngegebenWerden";
 
 export function findeNaechstenPfad(event: FormEvent): string {
   const subpath = getNextSubpath(event);
@@ -278,11 +279,9 @@ function getNextSubpath(event: FormEvent): string {
         }
 
         if (taetigkeiten.hatMinijob) {
-          const zielRoute =
-            !taetigkeiten.hatAndereLeistungen &&
-            !taetigkeiten.hatPeriodenOhneEinkommen
-              ? Route.ElternteilTaetigkeitenMinijobAngaben
-              : Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert;
+          const zielRoute = kannDurchschnittAngegebenWerden(taetigkeiten)
+            ? Route.ElternteilTaetigkeitenMinijobAngaben
+            : Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert;
 
           return generateParametrizedPath(zielRoute, {
             elternteilIndex: params.elternteilIndex.toString(),

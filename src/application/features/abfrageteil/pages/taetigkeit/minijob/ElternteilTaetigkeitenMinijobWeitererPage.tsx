@@ -10,6 +10,7 @@ import { Button } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { kannDurchschnittAngegebenWerden } from "@/application/features/abfrageteil/domain/kannDurchschnittAngegebenWerden";
 // import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { sindBeideElternteile } from "@/application/features/abfrageteil/domain/sindBeideElternteile";
@@ -48,8 +49,6 @@ export function ElternteilTaetigkeitenMinijobWeitererPage() {
     routeParams.elternteilIndex,
   );
   const istSelbststaendigeTaetigkeitVorhanden = taetigkeiten.istSelbststaendig;
-  const kannDurchschnittAngegebenWerden =
-    !taetigkeiten.hatPeriodenOhneEinkommen && !taetigkeiten.hatAndereLeistungen;
   const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(eventStream);
 
   const { register, handleSubmit, formState } = useFormWithValidationTracking({
@@ -69,7 +68,8 @@ export function ElternteilTaetigkeitenMinijobWeitererPage() {
       params: routeParams,
       dependentValues: {
         istSelbststaendigeTaetigkeitVorhanden,
-        kannDurchschnittAngegebenWerden,
+        kannDurchschnittAngegebenWerden:
+          kannDurchschnittAngegebenWerden(taetigkeiten),
         wirdZweitePersonBeruecksichtigt,
       },
     };

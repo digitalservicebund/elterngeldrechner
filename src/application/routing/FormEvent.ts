@@ -25,6 +25,8 @@ import {
   WahrscheinlichGeborenesKindSchema,
 } from "@/application/features/abfrageteil/pages/kind/KindSchema";
 import {
+  TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
+  TaetigkeitenAngestelltHauptjobSchema,
   TaetigkeitGleichesEinkommenAngabenSchema,
   TaetigkeitMinijobEinkommendetailsAbfrageSchema,
   TaetigkeitNichtSelbststaendigAngabenSchema,
@@ -201,36 +203,45 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenAngestelltHauptjob),
     params: AngestelltParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitenAngestelltHauptjobSchema,
+    dependentValues: z.object({
+      kannDurchschnittAngegebenWerden: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenAngestelltAngaben),
     params: AngestelltParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenAngestelltEinkommen),
     params: AngestelltParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitGleichesEinkommenAngabenSchema,
   }),
   z.object({
     route: z.literal(
       Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert,
     ),
     params: AngestelltParams,
-    payload: z.never().optional(),
+    payload: TaetigkeitUnleichesEinkommenAngabenSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenAngestelltWeitere),
     params: AngestelltParams,
-    payload: z.never().optional(),
+    payload: WeitereTaetigkeitAbfrageSchema,
+    dependentValues: z.object({
+      istMinijobVorhanden: z.boolean(),
+      istSelbststaendigeTaetigkeitVorhanden: z.boolean(),
+      kannDurchschnittAngegebenWerden: z.boolean(),
+      wirdZweitePersonBeruecksichtigt: z.boolean(),
+    }),
   }),
 
   // Minijob
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenMinijobAngaben),
     params: MinijobParams,
-    payload: TaetigkeitMinijobEinkommendetailsAbfrageSchema,
+    payload: TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenMinijobEinkommen),

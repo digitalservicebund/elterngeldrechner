@@ -3,16 +3,17 @@ import { useId } from "react";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
-  TaetigkeitEinkommenGleichVerteiltAbfrage,
-  TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
+  WeitereTaetigkeitAbfrage,
+  WeitereTaetigkeitAbfrageSchema,
 } from "@/application/features/abfrageteil/pages/taetigkeit/TaetigkeitSchema";
-import { Button, InfoText } from "@/application/features/components";
-// import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
+import { Button } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
-// import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { kannDurchschnittAngegebenWerden } from "@/application/features/abfrageteil/domain/kannDurchschnittAngegebenWerden";
 // import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
+import { sindBeideElternteile } from "@/application/features/abfrageteil/domain/sindBeideElternteile";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 // import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
@@ -23,37 +24,56 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
-import { MinijobGrenzeErklaerung } from "./MinijobGrenzeErklaerung";
+import {
+  formatiereKardinalzahlAlsWort,
+  formatiereOrdnungszahlAlsWortMaskulinAkkusativ,
+} from "@/application/features/abfrageteil/pages/taetigkeit/formatiereZahlwoerter";
 
-export function ElternteilTaetigkeitenMinijobAngabenPage() {
+export function ElternteilTaetigkeitenAngestelltWeiterePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
     useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilTaetigkeitenMinijobAngaben;
+  const currentRoute = Route.ElternteilTaetigkeitenAngestelltWeitere;
   const routeParams = useRouteParams(currentRoute);
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(
     currentRoute,
     routeParams,
   );
 
+  const eventStream = filtereValideEventHistorie();
+  const taetigkeiten = findeTaetigkeiten(
+    eventStream,
+    routeParams.elternteilIndex,
+  );
+  const istMinijobVorhanden = taetigkeiten.hatMinijob === true;
+  const istSelbststaendigeTaetigkeitVorhanden = taetigkeiten.istSelbststaendig;
+  const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(eventStream);
+
   const { register, handleSubmit, formState } = useFormWithValidationTracking({
-    resolver: zodResolver(TaetigkeitEinkommenGleichVerteiltAbfrageSchema),
+    resolver: zodResolver(WeitereTaetigkeitAbfrageSchema),
     defaultValues: encodeSafely(
-      TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
+      WeitereTaetigkeitAbfrageSchema,
       letztesGueltigesEvent,
     ),
   });
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = async (values: TaetigkeitEinkommenGleichVerteiltAbfrage) => {
+  const onSubmit = async (values: WeitereTaetigkeitAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       params: routeParams,
+      dependentValues: {
+        istMinijobVorhanden,
+        istSelbststaendigeTaetigkeitVorhanden,
+        kannDurchschnittAngegebenWerden:
+          kannDurchschnittAngegebenWerden(taetigkeiten),
+        wirdZweitePersonBeruecksichtigt,
+      },
     };
 
     dispatch(event);
@@ -63,11 +83,6 @@ export function ElternteilTaetigkeitenMinijobAngabenPage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  const eventStream = filtereValideEventHistorie();
-  // const taetigkeiten = findeTaetigkeiten(
-  //   eventStream,
-  //   routeParams.elternteilIndex,
-  // );
   // const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   // const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
   //   routeParams.elternteilIndex,
@@ -76,53 +91,46 @@ export function ElternteilTaetigkeitenMinijobAngabenPage() {
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
+  const jaLabel =
+    routeParams.angestelltIndex > 0
+      ? `Ja, ${vorname} hatte noch einen ${formatiereOrdnungszahlAlsWortMaskulinAkkusativ(routeParams.angestelltIndex + 1)} Nebenjob`
+      : `Ja, ${vorname} hatte noch zusätzlich einen Nebenjob`;
+  const neinLabel =
+    routeParams.angestelltIndex > 0
+      ? `Nein, ${vorname} hatte nur ${formatiereKardinalzahlAlsWort(routeParams.angestelltIndex + 1)} angestellte Tätigkeiten`
+      : `Nein, ${vorname} hatte nur eine einzige angestellte Tätigkeit`;
+
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend={`Wie hat ${vorname} im Bemessungszeitraum im Minijob pro Monat
-              verdient?`}
+          legend={`Hatte ${vorname} noch ${routeParams.angestelltIndex === 0 ? "zusätzlich einen" : "einen weiteren"} Nebenjob?`}
           errors={formErrors}
           register={register}
-          name="istEinkommenGleichVerteilt"
+          name="istWeitereTaetigkeitVorhanden"
           options={[
             {
               value: "yes",
-              label: `${vorname} hat jeden Monat gleich viel verdient`,
+              label: jaLabel,
             },
             {
               value: "no",
-              label: `${vorname} hat unterschiedlich viel verdient`,
+              label: neinLabel,
             },
           ]}
         >
-          <div className="input-container">
-            <div className="text-container">
-              <p className="mt-0">
-                Einmalzahlungen (wie Weihnachtsgeld) zählen hier nicht als
-                unterschiedlich. Es geht nur um das regelmäßige, laufende
-                Gehalt.
-              </p>
+          <>
+            <p className="mt-0">
+              Falls Sie neben Ihrem Hauptjob noch einen weiteren
+              steuerpflichtigen Job hatten, tragen Sie ihn hier ein.
+            </p>
+            {istMinijobVorhanden && (
               <p>
-                Beachten Sie: Je genauer Ihre Angaben sind, desto besser kann
-                der Rechner das Elterngeld für Sie berechnen.
+                Minijobs sind hier nicht gemeint, diese Angaben fragen wir
+                später ab.
               </p>
-            </div>
-
-            <InfoText
-              question="Wo ist die Minijob Grenze?"
-              answer={
-                <>
-                  <MinijobGrenzeErklaerung />
-                  <p>
-                    Beim Minijob fallen meist keine Steuern und Sozialabgaben
-                    an. Deshalb wird dieses Einkommen beim Elterngeld in der
-                    Regel in voller Höhe berücksichtigt.
-                  </p>
-                </>
-              }
-            />
-          </div>
+            )}
+          </>
         </CustomRadioGroup>
 
         <div className="button-group">

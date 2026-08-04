@@ -52,6 +52,11 @@ import { ElternteilTaetigkeitenMinijobAngabenPage } from "../features/abfragetei
 import { ElternteilTaetigkeitenMinijobEinkommenPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobEinkommenPage";
 import { ElternteilTaetigkeitenMinijobEinkommenDetailliertPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobEinkommenDetailliertPage";
 import { ElternteilTaetigkeitenMinijobWeitererPage } from "../features/abfrageteil/pages/taetigkeit/minijob/ElternteilTaetigkeitenMinijobWeitererPage";
+import { ElternteilTaetigkeitenAngestelltHauptjobPage } from "../features/abfrageteil/pages/taetigkeit/angestellt/ElternteilTaetigkeitenAngestelltHauptjobPage";
+import { ElternteilTaetigkeitenAngestelltAngabenPage } from "../features/abfrageteil/pages/taetigkeit/angestellt/ElternteilTaetigkeitenAngestelltAngabenPage";
+import { ElternteilTaetigkeitenAngestelltEinkommenPage } from "../features/abfrageteil/pages/taetigkeit/angestellt/ElternteilTaetigkeitenAngestelltEinkommenPage";
+import { ElternteilTaetigkeitenAngestelltEinkommenDetailliertPage } from "../features/abfrageteil/pages/taetigkeit/angestellt/ElternteilTaetigkeitenAngestelltEinkommenDetailliertPage";
+import { ElternteilTaetigkeitenAngestelltWeiterePage } from "../features/abfrageteil/pages/taetigkeit/angestellt/ElternteilTaetigkeitenAngestelltWeiterePage";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -241,6 +246,40 @@ const RouteDefinition = [
             element: <ElternteilWeitereTaetigkeitAngabenPage />,
             path: generateAbfrageteilPath(
               Route.ElternteilWeitereTaetigkeitAngaben,
+            ),
+          },
+
+          // Tätigkeiten angestellt
+          {
+            element: <ElternteilTaetigkeitenAngestelltHauptjobPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenAngestelltHauptjob,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenAngestelltAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenAngestelltAngaben,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenAngestelltEinkommenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenAngestelltEinkommen,
+            ),
+          },
+          {
+            element: (
+              <ElternteilTaetigkeitenAngestelltEinkommenDetailliertPage />
+            ),
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenAngestelltWeiterePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitenAngestelltWeitere,
             ),
           },
 

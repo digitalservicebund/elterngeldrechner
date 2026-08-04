@@ -41,6 +41,14 @@ export type TaetigkeitMinijobEinkommendetailsAbfrage = z.infer<
   typeof TaetigkeitMinijobEinkommendetailsAbfrageSchema
 >;
 
+export const TaetigkeitEinkommenGleichVerteiltAbfrageSchema = z.object({
+  istEinkommenGleichVerteilt: BooleanRadiobuttonCodec,
+});
+
+export type TaetigkeitEinkommenGleichVerteiltAbfrage = z.infer<
+  typeof TaetigkeitEinkommenGleichVerteiltAbfrageSchema
+>;
+
 export const TaetigkeitNichtSelbststaendigAngabenSchema = z.object({
   steuerklasse: z.enum(
     Steuerklasse,
@@ -55,6 +63,21 @@ export const TaetigkeitNichtSelbststaendigAngabenSchema = z.object({
 
 export type TaetigkeitNichtSelbststaendigAngaben = z.infer<
   typeof TaetigkeitNichtSelbststaendigAngabenSchema
+>;
+
+export const TaetigkeitenAngestelltHauptjobSchema = z.object({
+  steuerklasse: z.enum(
+    Steuerklasse,
+    "Wählen Sie bitte eine der Steuerklassen aus",
+  ),
+  istKirchensteuerpflichtig: BooleanRadiobuttonCodec,
+  istGesetzlichKrankenpflichtversichert: BooleanRadiobuttonCodec,
+  istGesetzlichRentenversichert: BooleanRadiobuttonCodec,
+  istGesetzlichArbeitlosenversichert: BooleanRadiobuttonCodec,
+});
+
+export type TaetigkeitenAngestelltHauptjob = z.infer<
+  typeof TaetigkeitenAngestelltHauptjobSchema
 >;
 
 const BruttoMonatseinkommen = z

@@ -310,16 +310,78 @@ function getNextSubpath(event: FormEvent): string {
     }
 
     // Tätigkeiten angestellt
-    case Route.ElternteilTaetigkeitenAngestelltHauptjob:
-      return "WIP";
-    case Route.ElternteilTaetigkeitenAngestelltAngaben:
-      return "WIP";
+    case Route.ElternteilTaetigkeitenAngestelltHauptjob: {
+      const { dependentValues, params } = event;
+
+      const zielRoute = dependentValues.kannDurchschnittAngegebenWerden
+        ? Route.ElternteilTaetigkeitenAngestelltAngaben
+        : Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert;
+
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: params.elternteilIndex.toString(),
+        angestelltIndex: params.angestelltIndex.toString(),
+      });
+    }
+    case Route.ElternteilTaetigkeitenAngestelltAngaben: {
+      const { payload, params } = event;
+
+      const zielRoute = payload.istEinkommenGleichVerteilt
+        ? Route.ElternteilTaetigkeitenAngestelltEinkommen
+        : Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: params.elternteilIndex.toString(),
+        angestelltIndex: params.angestelltIndex.toString(),
+      });
+    }
     case Route.ElternteilTaetigkeitenAngestelltEinkommen:
-      return "WIP";
     case Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert:
-      return "WIP";
-    case Route.ElternteilTaetigkeitenAngestelltWeitere:
-      return "WIP";
+      return generateParametrizedPath(
+        Route.ElternteilTaetigkeitenAngestelltWeitere,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+          angestelltIndex: event.params.angestelltIndex.toString(),
+        },
+      );
+    case Route.ElternteilTaetigkeitenAngestelltWeitere: {
+      const { payload, dependentValues, params } = event;
+
+      if (payload.istWeitereTaetigkeitVorhanden) {
+        const zielRoute = dependentValues.kannDurchschnittAngegebenWerden
+          ? Route.ElternteilTaetigkeitenAngestelltAngaben
+          : Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert;
+
+        return generateParametrizedPath(zielRoute, {
+          elternteilIndex: params.elternteilIndex.toString(),
+          angestelltIndex: (params.angestelltIndex + 1).toString(),
+        });
+      }
+
+      if (dependentValues.istMinijobVorhanden) {
+        const zielRoute = dependentValues.kannDurchschnittAngegebenWerden
+          ? Route.ElternteilTaetigkeitenMinijobAngaben
+          : Route.ElternteilTaetigkeitenMinijobEinkommenDetailliert;
+
+        return generateParametrizedPath(zielRoute, {
+          elternteilIndex: params.elternteilIndex.toString(),
+          minijobIndex: "0",
+        });
+      }
+
+      if (dependentValues.istSelbststaendigeTaetigkeitVorhanden) {
+        return generateParametrizedPath(
+          Route.ElternteilTaetigkeitenSelbststaendigAngaben,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            selbststaendigIndex: "0",
+          },
+        );
+      }
+
+      return !dependentValues.wirdZweitePersonBeruecksichtigt ||
+        event.params.elternteilIndex === 1
+        ? "DONE"
+        : Route.ElternteilZweiAllgemeineAngaben;
+    }
 
     // Tätigkeiten Minijob
     case Route.ElternteilTaetigkeitenMinijobAngaben: {
@@ -1511,6 +1573,268 @@ if (import.meta.vitest) {
             "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/0/angaben",
           );
         });
+      });
+    });
+
+    describe("ElternteilTaetigkeitenAngestelltHauptjob", () => {
+      it("returns ElternteilTaetigkeitenAngestelltAngaben given kannDurchschnittAngegebenWerden true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltHauptjob,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+          },
+          dependentValues: {
+            kannDurchschnittAngegebenWerden: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/angaben",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAngestelltEinkommenDetailliert given kannDurchschnittAngegebenWerden false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltHauptjob,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+          },
+          dependentValues: {
+            kannDurchschnittAngegebenWerden: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/einkommen/detailliert",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitenAngestelltAngaben", () => {
+      it("returns ElternteilTaetigkeitenAngestelltEinkommen given istEinkommenGleichVerteilt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltAngaben,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istEinkommenGleichVerteilt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/einkommen",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAngestelltEinkommenDetailliert given istEinkommenGleichVerteilt false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltAngaben,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istEinkommenGleichVerteilt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/einkommen/detailliert",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitenAngestelltEinkommen", () => {
+      it("returns ElternteilTaetigkeitenAngestelltWeitere given ElternteilTaetigkeitenAngestelltEinkommen as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltEinkommen,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            durchschnittlichesMonatsbrutto: 3000,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/weiterer",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitenAngestelltEinkommenDetailliert", () => {
+      it("returns ElternteilTaetigkeitenAngestelltWeitere given ElternteilTaetigkeitenAngestelltEinkommenDetailliert as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltEinkommenDetailliert,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            monatsbrutto: new Array<number>(12).fill(3000),
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/weiterer",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitenAngestelltWeitere", () => {
+      it("returns ElternteilTaetigkeitenAngestelltAngaben for the next angestelltIndex given istWeitereTaetigkeitVorhanden and kannDurchschnittAngegebenWerden both true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: true,
+          },
+          dependentValues: {
+            istMinijobVorhanden: false,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: true,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/1/angaben",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAngestelltEinkommenDetailliert for the next angestelltIndex given istWeitereTaetigkeitVorhanden true and kannDurchschnittAngegebenWerden false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: true,
+          },
+          dependentValues: {
+            istMinijobVorhanden: false,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: false,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/1/einkommen/detailliert",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenMinijobAngaben given istWeitereTaetigkeitVorhanden false, istMinijobVorhanden and kannDurchschnittAngegebenWerden both true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            istMinijobVorhanden: true,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: true,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/minijob/0/angaben",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenMinijobEinkommenDetailliert given istWeitereTaetigkeitVorhanden false, istMinijobVorhanden true and kannDurchschnittAngegebenWerden false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            istMinijobVorhanden: true,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: false,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/minijob/0/einkommen/detailliert",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenSelbststaendigAngaben given neither istWeitereTaetigkeitVorhanden nor istMinijobVorhanden, and istSelbststaendigeTaetigkeitVorhanden true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            istMinijobVorhanden: false,
+            istSelbststaendigeTaetigkeitVorhanden: true,
+            kannDurchschnittAngegebenWerden: false,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/selbststaendig/0/angaben",
+        );
+      });
+
+      it("returns ElternteilZweiAllgemeineAngaben given none of istWeitereTaetigkeitVorhanden, istMinijobVorhanden nor istSelbststaendigeTaetigkeitVorhanden, and wirdZweitePersonBeruecksichtigt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            istMinijobVorhanden: false,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: false,
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
+      });
+
+      it("returns /beispiele given none of istWeitereTaetigkeitVorhanden, istMinijobVorhanden nor istSelbststaendigeTaetigkeitVorhanden, and wirdZweitePersonBeruecksichtigt false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 0, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            istMinijobVorhanden: false,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: false,
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
+      });
+
+      it("returns /beispiele given elternteilIndex 1, even if wirdZweitePersonBeruecksichtigt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAngestelltWeitere,
+          params: { elternteilIndex: 1, angestelltIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
+            istMinijobVorhanden: false,
+            istSelbststaendigeTaetigkeitVorhanden: false,
+            kannDurchschnittAngegebenWerden: false,
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
       });
     });
 

@@ -3,12 +3,12 @@ import { useId } from "react";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
-  TaetigkeitEinkommenGleichVerteiltAbfrage,
-  TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
+  TaetigkeitGleichesEinkommenAngaben,
+  TaetigkeitGleichesEinkommenAngabenSchema,
 } from "@/application/features/abfrageteil/pages/taetigkeit/TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
 // import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
-import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
+import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";
 // import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 // import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
@@ -23,33 +23,36 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
-import { MinijobGrenzeErklaerung } from "./MinijobGrenzeErklaerung";
 
-export function ElternteilTaetigkeitenMinijobAngabenPage() {
+export function ElternteilTaetigkeitenAngestelltEinkommenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
     useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilTaetigkeitenMinijobAngaben;
+  const currentRoute = Route.ElternteilTaetigkeitenAngestelltEinkommen;
   const routeParams = useRouteParams(currentRoute);
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(
     currentRoute,
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useFormWithValidationTracking({
-    resolver: zodResolver(TaetigkeitEinkommenGleichVerteiltAbfrageSchema),
+  const eventStream = filtereValideEventHistorie();
+  // const taetigkeiten = findeTaetigkeiten(
+  //   eventStream,
+  //   routeParams.elternteilIndex,
+  // );
+
+  const { handleSubmit, control } = useFormWithValidationTracking({
+    resolver: zodResolver(TaetigkeitGleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
-      TaetigkeitEinkommenGleichVerteiltAbfrageSchema,
+      TaetigkeitGleichesEinkommenAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
 
-  const { errors: formErrors } = formState;
-
-  const onSubmit = async (values: TaetigkeitEinkommenGleichVerteiltAbfrage) => {
+  const onSubmit = async (values: TaetigkeitGleichesEinkommenAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -63,11 +66,6 @@ export function ElternteilTaetigkeitenMinijobAngabenPage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  const eventStream = filtereValideEventHistorie();
-  // const taetigkeiten = findeTaetigkeiten(
-  //   eventStream,
-  //   routeParams.elternteilIndex,
-  // );
   // const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   // const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
   //   routeParams.elternteilIndex,
@@ -79,51 +77,43 @@ export function ElternteilTaetigkeitenMinijobAngabenPage() {
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
-        <CustomRadioGroup
-          legend={`Wie hat ${vorname} im Bemessungszeitraum im Minijob pro Monat
-              verdient?`}
-          errors={formErrors}
-          register={register}
-          name="istEinkommenGleichVerteilt"
-          options={[
-            {
-              value: "yes",
-              label: `${vorname} hat jeden Monat gleich viel verdient`,
-            },
-            {
-              value: "no",
-              label: `${vorname} hat unterschiedlich viel verdient`,
-            },
-          ]}
-        >
-          <div className="input-container">
-            <div className="text-container">
-              <p className="mt-0">
-                Einmalzahlungen (wie Weihnachtsgeld) zählen hier nicht als
-                unterschiedlich. Es geht nur um das regelmäßige, laufende
-                Gehalt.
-              </p>
-              <p>
-                Beachten Sie: Je genauer Ihre Angaben sind, desto besser kann
-                der Rechner das Elterngeld für Sie berechnen.
-              </p>
-            </div>
+        <div className="input-container">
+          <h3>Wie viel hat {vorname} im Monat brutto verdient?</h3>
 
-            <InfoText
-              question="Wo ist die Minijob Grenze?"
-              answer={
-                <>
-                  <MinijobGrenzeErklaerung />
-                  <p>
-                    Beim Minijob fallen meist keine Steuern und Sozialabgaben
-                    an. Deshalb wird dieses Einkommen beim Elterngeld in der
-                    Regel in voller Höhe berücksichtigt.
-                  </p>
-                </>
-              }
-            />
-          </div>
-        </CustomRadioGroup>
+          <InfoText
+            question="Wo finde ich die Angabe zu meinem Bruttogehalt?"
+            answer={
+              <>
+                <p>
+                  Am genauesten finden Sie Ihr monatliches Bruttogehalt auf
+                  Ihrer Gehaltsabrechnung (meist als „Brutto“ oder
+                  „Gesamtbrutto“ bezeichnet).
+                </p>
+                <p>
+                  Auf Ihrer Lohnsteuerbescheinigung steht das Jahresbrutto. Wenn
+                  Sie das ganze Jahr gleich viel verdient haben, können Sie
+                  diesen Betrag durch 12 teilen, um einen durchschnittlichen
+                  Monatswert zu berechnen.
+                </p>
+                <p className="font-bold">
+                  Wichtig – Sonderzahlungen weglassen:
+                </p>
+                <p>
+                  Bitte rechnen Sie Einmalzahlungen (wie Weihnachtsgeld,
+                  Urlaubsgeld, ein 13./14. Monatsgehalt oder Boni) nicht in den
+                  Betrag ein. Tragen Sie nur das reine, regelmäßige Grundgehalt
+                  ein.
+                </p>
+              </>
+            }
+          />
+
+          <CurrencyInput
+            control={control}
+            name="durchschnittlichesMonatsbrutto"
+            label="Monatliches Brutto-Einkommen"
+          />
+        </div>
 
         <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

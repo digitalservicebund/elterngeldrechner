@@ -23,16 +23,15 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
-import { MinijobGrenzeErklaerung } from "./MinijobGrenzeErklaerung";
 
-export function ElternteilTaetigkeitenMinijobAngabenPage() {
+export function ElternteilTaetigkeitenAngestelltAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
     useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilTaetigkeitenMinijobAngaben;
+  const currentRoute = Route.ElternteilTaetigkeitenAngestelltAngaben;
   const routeParams = useRouteParams(currentRoute);
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(
     currentRoute,
@@ -80,7 +79,7 @@ export function ElternteilTaetigkeitenMinijobAngabenPage() {
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend={`Wie hat ${vorname} im Bemessungszeitraum im Minijob pro Monat
+          legend={`Wie hat ${vorname} im Bemessungszeitraum pro Monat
               verdient?`}
           errors={formErrors}
           register={register}
@@ -110,15 +109,35 @@ export function ElternteilTaetigkeitenMinijobAngabenPage() {
             </div>
 
             <InfoText
-              question="Wo ist die Minijob Grenze?"
+              question="Was bedeutet immer gleich viel verdient?"
               answer={
                 <>
-                  <MinijobGrenzeErklaerung />
                   <p>
-                    Beim Minijob fallen meist keine Steuern und Sozialabgaben
-                    an. Deshalb wird dieses Einkommen beim Elterngeld in der
-                    Regel in voller Höhe berücksichtigt.
+                    Wählen Sie gleich viel verdient, wenn Sie immer das gleiche
+                    feste Bruttogehalt oder den gleichen Stundenlohn hatten.
                   </p>
+                  <p>
+                    Wählen Sie unterschiedlich viel verdient, wenn sich das
+                    monatliche Gehalt verändert hat (zum Beispiel durch eine
+                    Gehaltserhöhung oder einen Jobwechsel).
+                  </p>
+                  <p className="font-bold">
+                    Wichtig – Sonderzahlungen zählen nicht mit.
+                  </p>
+                  <p>
+                    Für die Berechnung des Elterngeldes werden keine
+                    Einmalzahlungen berücksichtigt. Bitte lassen Sie folgende
+                    Zahlungen außer Acht, zum Beispiel:
+                  </p>
+                  <ul>
+                    <li>
+                      Weihnachtsgeld, Urlaubsgeld oder ein 13. oder 14.
+                      Monatsgehalt
+                    </li>
+                    <li>
+                      Einmalige Boni, Provisionen, Tantiemen oder Abfindungen
+                    </li>
+                  </ul>
                 </>
               }
             />

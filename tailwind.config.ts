@@ -33,8 +33,6 @@ export default {
       text: "#000000",
       "text-light": "#595959",
       "text-muted": "#404565",
-      success: "#056639",
-      "success-background": "#DEF6ED",
       info: "#006685",
       "info-background": "#D5F6FF",
       warning: "#e18324",

@@ -76,9 +76,9 @@ export function GeschwisterbonusUebersichtPage() {
     <Page heading="Angaben zu Geschwistern">
       <div className="content-container">
         {geschwisterbonusEnddatum ? (
-          <div className="rounded border-solid border-success">
-            <div className="flex rounded bg-success-background p-20 font-bold">
-              <SuccessIcon className="mr-10 mt-6 shrink-0 text-success" />
+          <div className="rounded border-solid border-primary-light">
+            <div className="flex rounded bg-primary-light/40 p-20 font-bold">
+              <SuccessIcon className="mr-10 mt-6 shrink-0 text-primary" />
 
               <h3>Super, Sie können den Geschwisterbonus erhalten</h3>
             </div>

@@ -1,4 +1,3 @@
-import SuccessIcon from "~icons/material-symbols/check-circle-outline";
 import { Temporal } from "@js-temporal/polyfill";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/features/components";
@@ -102,10 +101,8 @@ export function ElternteilBMZUebersichtPage() {
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <div className="content-container">
-        <div className="rounded border-solid border-success">
-          <div className="flex rounded bg-success-background p-20 font-bold">
-            <SuccessIcon className="mr-10 mt-6 shrink-0 text-success" />
-
+        <div className="rounded border-solid border-primary-light">
+          <div className="flex rounded bg-primary-light/40 p-20 font-bold">
             <BMZUeberschrift
               taetigkeitenFlow={taetigkeitenFlow}
               vorname={vorname}

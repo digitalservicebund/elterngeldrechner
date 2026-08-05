@@ -1661,7 +1661,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/weiterer",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/weitere",
         );
       });
     });
@@ -1677,7 +1677,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/weiterer",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/angestellt/0/weitere",
         );
       });
     });

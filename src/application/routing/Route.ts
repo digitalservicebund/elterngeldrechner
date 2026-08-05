@@ -32,7 +32,7 @@ export enum Route {
   ElternteilTaetigkeitenAngestelltAngaben = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/angestellt/:angestelltIndex/angaben",
   ElternteilTaetigkeitenAngestelltEinkommen = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/angestellt/:angestelltIndex/einkommen",
   ElternteilTaetigkeitenAngestelltEinkommenDetailliert = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/angestellt/:angestelltIndex/einkommen/detailliert",
-  ElternteilTaetigkeitenAngestelltWeitere = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/angestellt/:angestelltIndex/weiterer",
+  ElternteilTaetigkeitenAngestelltWeitere = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/angestellt/:angestelltIndex/weitere",
 
   // Minijob
   ElternteilTaetigkeitenMinijobAngaben = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/minijob/:minijobIndex/angaben",

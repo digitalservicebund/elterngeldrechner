@@ -8,6 +8,7 @@ node = "24.18.0"
 actionlint = "1.7.12"
 awscli = "2.36.13"
 git-cliff = "2.13.1"
+hk = "1.53.0"
 jq = "1.8.2"
 lychee = "0.24.2"
 
@@ -40,6 +41,10 @@ run = "npm run --silent stylelint"
 [tasks.test]
 description = "Run the vitest suite"
 run = "npm run --silent test -- --reporter=minimal"
+
+[tasks.link-check]
+description = "Check the external links in the sources and the documentation"
+run = 'lychee --no-progress . "src/**/*.ts" "src/**/*.tsx"'
 
 [tasks.build]
 description = "Build the widget for the environment selected with MISE_ENV"

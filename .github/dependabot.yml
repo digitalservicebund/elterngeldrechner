@@ -15,10 +15,6 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
-      commitlint:
-        patterns:
-          - "commitlint"
-          - "@commitlint/*"
       testing-library:
         patterns:
           - "@testing-library/*"

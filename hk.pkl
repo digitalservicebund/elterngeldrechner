@@ -1,0 +1,50 @@
+amends "package://github.com/jdx/hk/releases/download/v1.53.0/hk@1.53.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.53.0/hk@1.53.0#/Builtins.pkl"
+
+// Report every step's findings. Without this a failing linter aborts the run
+// before the later steps report, so one error can hide all the others.
+fail_fast = false
+
+local allSteps = new Mapping<String, Step | Group> {
+  ["code"] = new Group {
+    prefix = "npm exec --"
+    steps {
+      ["format"] = (Builtins.prettier) {
+        check = "prettier --check {{files}}"
+        check_list_files = "prettier --list-different {{files}}"
+        fix = "prettier --write {{files}}"
+      }
+      ["stylelint"] = (Builtins.stylelint) {
+        glob = "src/**/*.css"
+      }
+      ["type-check"] = Builtins.tsc
+      ["lint"] = Builtins.ox_lint
+    }
+  }
+  ["audit-licenses"] {
+    glob = List("package.json", "package-lock.json", "allowed-licenses", "license-clarifications.json")
+    check = "npm run --silent audit-licenses"
+  }
+  ["secret-scan"] {
+    check = #"trivy --quiet filesystem . --scanners secret --skip-files "**/.env*" --exit-code 1"#
+  }
+}
+
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stage = false
+    fail_on_fix = true
+    steps = allSteps
+  }
+
+  ["commit-msg"] {
+    steps {
+      ["conventional-commit"] = Builtins.check_conventional_commit
+    }
+  }
+
+  ["check"] {
+    steps = allSteps
+  }
+}

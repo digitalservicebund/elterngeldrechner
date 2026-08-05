@@ -1,5 +1,5 @@
-import { findeSozialversicherungen } from "./findeSozialversicherungenNew";
-import { sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt } from "./sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischtNew";
+import { findeSozialversicherungen } from "./findeSozialversicherungen";
+import { sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt } from "./sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt";
 import { sindBeideElternteile } from "./sindBeideElternteile";
 import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections";

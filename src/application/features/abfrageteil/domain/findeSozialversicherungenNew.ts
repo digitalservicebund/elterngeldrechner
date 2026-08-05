@@ -1,5 +1,4 @@
-import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections";
-import type { TaetigkeitNichtSelbststaendigAngaben } from "@/application/features/abfrageteil/pages/taetigkeit/TaetigkeitSchema";
+import type { TaetigkeitenAngestelltHauptjob } from "@/application/features/abfrageteil/pages/taetigkeit/TaetigkeitSchema";
 import type { FormEvent } from "@/application/routing/FormEvent";
 import { Route } from "@/application/routing/Route";
 import { Steuerklasse } from "@/elterngeldrechner";
@@ -7,99 +6,92 @@ import { Steuerklasse } from "@/elterngeldrechner";
 export function findeSozialversicherungen(
   events: FormEvent[],
   elternteilIndex: number,
-  taetigkeitIndex: number,
-): TaetigkeitNichtSelbststaendigAngaben {
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    events,
-    Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-    { elternteilIndex, taetigkeitIndex },
+): TaetigkeitenAngestelltHauptjob {
+  const hauptjobEvent = events.findLast(
+    (e): e is HauptjobEvent =>
+      e.route === Route.ElternteilTaetigkeitenAngestelltHauptjob &&
+      e.params.elternteilIndex === elternteilIndex &&
+      e.params.angestelltIndex === 0,
   );
 
-  if (!letztesGueltigesEvent) {
+  if (!hauptjobEvent) {
     throw new Error(
-      `No Sozialversicherungen event found for elternteil ${elternteilIndex}, taetigkeitIndex ${taetigkeitIndex}.`,
+      `No Hauptjob event found for elternteil ${elternteilIndex}.`,
     );
   }
 
-  return letztesGueltigesEvent;
+  return hauptjobEvent.payload;
 }
+
+type HauptjobEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilTaetigkeitenAngestelltHauptjob }
+>;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("findeSozialversicherungen", () => {
-    const sozialversicherungEvent = {
-      steuerklasse: Steuerklasse.I,
-      istKirchensteuerpflichtig: false,
-      istGesetzlichKrankenpflichtversichert: true,
-      istGesetzlichRentenversichert: true,
-      istGesetzlichArbeitlosenversichert: true,
-      istEinkommenGleichVerteilt: true,
+    const hauptjobEvent: FormEvent = {
+      route: Route.ElternteilTaetigkeitenAngestelltHauptjob,
+      params: { elternteilIndex: 0, angestelltIndex: 0 },
+      payload: {
+        steuerklasse: Steuerklasse.I,
+        istKirchensteuerpflichtig: false,
+        istGesetzlichKrankenpflichtversichert: true,
+        istGesetzlichRentenversichert: true,
+        istGesetzlichArbeitlosenversichert: true,
+      },
+      dependentValues: { kannDurchschnittAngegebenWerden: true },
     };
 
-    it("throws when no event exists", () => {
-      expect(() => findeSozialversicherungen([], 0, 0)).toThrow();
+    it("throws when no Hauptjob event exists", () => {
+      expect(() => findeSozialversicherungen([], 0)).toThrow();
     });
 
-    it("throws when no event exists for the given elternteilIndex", () => {
+    it("throws when no Hauptjob event exists for the given elternteilIndex", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
-          payload: sozialversicherungEvent,
+          ...hauptjobEvent,
+          params: { elternteilIndex: 1, angestelltIndex: 0 },
         },
       ];
 
-      expect(() => findeSozialversicherungen(events, 0, 0)).toThrow();
+      expect(() => findeSozialversicherungen(events, 0)).toThrow();
     });
 
-    it("throws when only events for taetigkeitIndex other than 0 exist", () => {
+    it("throws when only a Nebenjob (angestelltIndex > 0) event exists", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-          payload: sozialversicherungEvent,
+          ...hauptjobEvent,
+          params: { elternteilIndex: 0, angestelltIndex: 1 },
         },
       ];
 
-      expect(() => findeSozialversicherungen(events, 0, 0)).toThrow();
+      expect(() => findeSozialversicherungen(events, 0)).toThrow();
     });
 
-    it("returns the payload for the given elternteilIndex", () => {
-      const events: FormEvent[] = [
-        {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: sozialversicherungEvent,
-        },
-      ];
+    it("returns the payload of the Hauptjob event for the given elternteilIndex", () => {
+      const events: FormEvent[] = [hauptjobEvent];
 
-      expect(findeSozialversicherungen(events, 0, 0)).toEqual(
-        sozialversicherungEvent,
+      expect(findeSozialversicherungen(events, 0)).toEqual(
+        hauptjobEvent.payload,
       );
     });
 
-    it("returns the most recent event for the given elternteilIndex", () => {
-      const updatedSozialversicherungen = {
-        ...sozialversicherungEvent,
-        istGesetzlichRentenversichert: false,
+    it("returns the most recent Hauptjob event for the given elternteilIndex", () => {
+      const updatedHauptjobEvent: FormEvent = {
+        ...hauptjobEvent,
+        payload: {
+          ...hauptjobEvent.payload,
+          istGesetzlichRentenversichert: false,
+        },
       };
 
-      const events: FormEvent[] = [
-        {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: sozialversicherungEvent,
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: updatedSozialversicherungen,
-        },
-      ];
+      const events: FormEvent[] = [hauptjobEvent, updatedHauptjobEvent];
 
-      expect(findeSozialversicherungen(events, 0, 0)).toEqual(
-        updatedSozialversicherungen,
+      expect(findeSozialversicherungen(events, 0)).toEqual(
+        updatedHauptjobEvent.payload,
       );
     });
   });

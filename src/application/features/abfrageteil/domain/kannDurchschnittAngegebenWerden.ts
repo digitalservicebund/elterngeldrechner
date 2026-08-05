@@ -11,7 +11,7 @@ export function kannDurchschnittAngegebenWerden(
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  const base = {
+  const taetigkeitenAngaben = {
     istNichtSelbststaendig: false,
     istSelbststaendig: false,
     istVerbeamtet: false,
@@ -21,13 +21,13 @@ if (import.meta.vitest) {
 
   describe("kannDurchschnittAngegebenWerden", () => {
     it("returns true when neither hatPeriodenOhneEinkommen nor hatAndereLeistungen is set", () => {
-      expect(kannDurchschnittAngegebenWerden(base)).toBe(true);
+      expect(kannDurchschnittAngegebenWerden(taetigkeitenAngaben)).toBe(true);
     });
 
     it("returns false when hatPeriodenOhneEinkommen is true", () => {
       expect(
         kannDurchschnittAngegebenWerden({
-          ...base,
+          ...taetigkeitenAngaben,
           hatPeriodenOhneEinkommen: true,
         }),
       ).toBe(false);
@@ -35,14 +35,17 @@ if (import.meta.vitest) {
 
     it("returns false when hatAndereLeistungen is true", () => {
       expect(
-        kannDurchschnittAngegebenWerden({ ...base, hatAndereLeistungen: true }),
+        kannDurchschnittAngegebenWerden({
+          ...taetigkeitenAngaben,
+          hatAndereLeistungen: true,
+        }),
       ).toBe(false);
     });
 
     it("returns false when both hatPeriodenOhneEinkommen and hatAndereLeistungen are true", () => {
       expect(
         kannDurchschnittAngegebenWerden({
-          ...base,
+          ...taetigkeitenAngaben,
           hatPeriodenOhneEinkommen: true,
           hatAndereLeistungen: true,
         }),

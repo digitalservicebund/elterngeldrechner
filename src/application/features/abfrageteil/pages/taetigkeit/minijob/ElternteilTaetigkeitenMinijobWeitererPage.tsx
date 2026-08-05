@@ -11,11 +11,11 @@ import { CustomRadioGroup } from "@/application/features/components/CustomRadioG
 import { Page } from "@/application/features/components/Page";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { kannDurchschnittAngegebenWerden } from "@/application/features/abfrageteil/domain/kannDurchschnittAngegebenWerden";
-// import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
+import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { sindBeideElternteile } from "@/application/features/abfrageteil/domain/sindBeideElternteile";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
-// import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
+import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {
   type FormEvent,
@@ -28,6 +28,7 @@ import {
   formatiereKardinalzahlAlsWort,
   formatiereOrdnungszahlAlsWortMaskulinAkkusativ,
 } from "@/application/features/abfrageteil/pages/taetigkeit/formatiereZahlwoerter";
+import { ElternteilTaetigkeitenUebersichtsBox } from "../ElternteilTaetigkeitenUebersichtsBox";
 
 export function ElternteilTaetigkeitenMinijobWeitererPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -81,11 +82,11 @@ export function ElternteilTaetigkeitenMinijobWeitererPage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  // const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
-  // const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
-  //   routeParams.elternteilIndex,
-  // );
-  // const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
+  const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
+  const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
+    routeParams.elternteilIndex,
+  );
+  const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
@@ -97,6 +98,13 @@ export function ElternteilTaetigkeitenMinijobWeitererPage() {
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <ElternteilTaetigkeitenUebersichtsBox
+          currentRoute={currentRoute}
+          taetigkeitIndex={routeParams.minijobIndex}
+          taetigkeitenFlow={taetigkeitenFlow}
+          bemessungszeitraum={bemessungszeitraum}
+        />
+
         <CustomRadioGroup
           legend={`Hatte ${vorname} noch einen weiteren Minijob im Bemessungszeitraum?`}
           errors={formErrors}

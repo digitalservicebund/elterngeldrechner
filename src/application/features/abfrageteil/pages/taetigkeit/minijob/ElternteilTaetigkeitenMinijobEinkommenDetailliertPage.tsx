@@ -24,6 +24,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
 import { InfoTextMinijobEinkommen } from "./InfoTextMinijobEinkommen";
+import { ElternteilTaetigkeitenUebersichtsBox } from "../ElternteilTaetigkeitenUebersichtsBox";
 
 export function ElternteilTaetigkeitenMinijobEinkommenDetailliertPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -82,6 +83,13 @@ export function ElternteilTaetigkeitenMinijobEinkommenDetailliertPage() {
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <ElternteilTaetigkeitenUebersichtsBox
+          currentRoute={currentRoute}
+          taetigkeitIndex={routeParams.minijobIndex}
+          taetigkeitenFlow={taetigkeitenFlow}
+          bemessungszeitraum={bemessungszeitraum}
+        />
+
         <div className="input-container">
           <div className="text-container">
             <h3>

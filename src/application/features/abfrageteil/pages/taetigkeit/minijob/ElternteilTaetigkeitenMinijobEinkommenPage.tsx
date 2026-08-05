@@ -7,14 +7,13 @@ import {
   TaetigkeitGleichesEinkommenAngabenSchema,
 } from "@/application/features/abfrageteil/pages/taetigkeit/TaetigkeitSchema";
 import { Button } from "@/application/features/components";
-// import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";
-// import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
-// import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
+import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
-// import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
+import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {
   type FormEvent,
@@ -24,6 +23,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
 import { InfoTextMinijobEinkommen } from "./InfoTextMinijobEinkommen";
+import { ElternteilTaetigkeitenUebersichtsBox } from "../ElternteilTaetigkeitenUebersichtsBox";
 
 export function ElternteilTaetigkeitenMinijobEinkommenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -40,10 +40,10 @@ export function ElternteilTaetigkeitenMinijobEinkommenPage() {
   );
 
   const eventStream = filtereValideEventHistorie();
-  // const taetigkeiten = findeTaetigkeiten(
-  //   eventStream,
-  //   routeParams.elternteilIndex,
-  // );
+  const taetigkeiten = findeTaetigkeiten(
+    eventStream,
+    routeParams.elternteilIndex,
+  );
 
   const { handleSubmit, control } = useFormWithValidationTracking({
     resolver: zodResolver(TaetigkeitGleichesEinkommenAngabenSchema),
@@ -67,17 +67,24 @@ export function ElternteilTaetigkeitenMinijobEinkommenPage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  // const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
-  // const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
-  //   routeParams.elternteilIndex,
-  // );
-  // const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
+  const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
+  const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
+    routeParams.elternteilIndex,
+  );
+  const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <ElternteilTaetigkeitenUebersichtsBox
+          currentRoute={currentRoute}
+          taetigkeitIndex={routeParams.minijobIndex}
+          taetigkeitenFlow={taetigkeitenFlow}
+          bemessungszeitraum={bemessungszeitraum}
+        />
+
         <div className="input-container">
           <h3>Wie viel hat {vorname} im Minijob im Monat brutto verdient?</h3>
 

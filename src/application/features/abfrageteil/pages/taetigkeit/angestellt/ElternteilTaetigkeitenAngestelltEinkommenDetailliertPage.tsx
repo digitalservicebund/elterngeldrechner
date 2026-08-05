@@ -23,6 +23,7 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
+import { ElternteilTaetigkeitenUebersichtsBox } from "../ElternteilTaetigkeitenUebersichtsBox";
 
 export function ElternteilTaetigkeitenAngestelltEinkommenDetailliertPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -82,6 +83,13 @@ export function ElternteilTaetigkeitenAngestelltEinkommenDetailliertPage() {
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <ElternteilTaetigkeitenUebersichtsBox
+          currentRoute={currentRoute}
+          taetigkeitIndex={routeParams.angestelltIndex}
+          taetigkeitenFlow={taetigkeitenFlow}
+          bemessungszeitraum={bemessungszeitraum}
+        />
+
         <div className="input-container">
           <div className="text-container">
             <h3>Wie viel hat {vorname} pro Monat brutto verdient?</h3>

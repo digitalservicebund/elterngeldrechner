@@ -21,6 +21,7 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "@/application/features/abfrageteil/hooks/useFormWithValidationTracking";
+import { ElternteilTaetigkeitenUebersichtsBox } from "../ElternteilTaetigkeitenUebersichtsBox";
 
 export function ElternteilTaetigkeitenSelbststaendigAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -73,6 +74,13 @@ export function ElternteilTaetigkeitenSelbststaendigAngabenPage() {
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="content-container">
+          <ElternteilTaetigkeitenUebersichtsBox
+            currentRoute={currentRoute}
+            taetigkeitIndex={routeParams.selbststaendigIndex}
+            taetigkeitenFlow="Selbstaendig"
+            bemessungszeitraum={bemessungszeitraum}
+          />
+
           <CustomRadioGroup
             legend={`War ${vorname} kirchensteuerpflichtig?`}
             errors={formErrors}

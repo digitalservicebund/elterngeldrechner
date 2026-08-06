@@ -20,9 +20,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("setzte Option in Lebensmonat zurück", async () => {
-    const { erstelleInitialenLebensmonat } = await import(
-      "./erstelleInitialenLebensmonat"
-    );
+    const { erstelleInitialenLebensmonat } =
+      await import("./erstelleInitialenLebensmonat");
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
 

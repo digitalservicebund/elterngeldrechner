@@ -34,9 +34,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("bestimmeLetztenGeplantenLebensmonat", async () => {
-    const { Elternteil, Variante, KeinElterngeld } = await import(
-      "@/monatsplaner"
-    );
+    const { Elternteil, Variante, KeinElterngeld } =
+      await import("@/monatsplaner");
 
     it("bestimmt den letzten lebensmonat der eine option hat", () => {
       const plan: Plan<AusgangslageFuerEinElternteil> = {

@@ -18,9 +18,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("Monat hat Option gewählt", async () => {
-    const { Auswahloptionen, KeinElterngeld } = await import(
-      "@/monatsplaner/Auswahloption"
-    );
+    const { Auswahloptionen, KeinElterngeld } =
+      await import("@/monatsplaner/Auswahloption");
 
     it.each(Auswahloptionen)(
       "is satisfied if %s is chosen and also expected",

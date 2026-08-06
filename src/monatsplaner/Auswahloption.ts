@@ -14,8 +14,7 @@ import { Variante, isVariante } from "./Variante";
 export const KeinElterngeld = "kein Elterngeld" as const;
 
 export const Auswahloptionen = [KeinElterngeld, ...Object.values(Variante)] as (
-  | Variante
-  | typeof KeinElterngeld
+  Variante | typeof KeinElterngeld
 )[];
 
 export type Auswahloption = (typeof Auswahloptionen)[number];

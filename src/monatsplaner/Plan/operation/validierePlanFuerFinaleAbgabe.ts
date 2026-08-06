@@ -16,12 +16,10 @@ if (import.meta.vitest) {
   const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("validiere Plan für finale Abgabe", async () => {
-    const { Specification } = await import(
-      "@/monatsplaner/common/specification"
-    );
-    const planSpecifications = await import(
-      "@/monatsplaner/Plan/specification"
-    );
+    const { Specification } =
+      await import("@/monatsplaner/common/specification");
+    const planSpecifications =
+      await import("@/monatsplaner/Plan/specification");
 
     it("is ok with undefined value if given Plan satisfies specification", () => {
       vi.spyOn(planSpecifications, "FinalGueltigerPlan").mockReturnValue(

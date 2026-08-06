@@ -3,8 +3,7 @@ import type { InformationenZumMutterschutz } from "@/monatsplaner/InformationenZ
 import type { NamenDerElternteile } from "@/monatsplaner/NamenDerElternteile";
 
 export type Ausgangslage =
-  | AusgangslageFuerEinElternteil
-  | AusgangslageFuerZweiElternteile;
+  AusgangslageFuerEinElternteil | AusgangslageFuerZweiElternteile;
 
 export type AusgangslageFuerEinElternteil = BasisAusgangslage<Elternteil.Eins>;
 

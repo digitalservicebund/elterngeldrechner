@@ -31,9 +31,8 @@ if (import.meta.vitest) {
 
   describe("Alle Elternteile haben Option gewählt", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
-    const { Auswahloptionen, KeinElterngeld } = await import(
-      "@/monatsplaner/Auswahloption"
-    );
+    const { Auswahloptionen, KeinElterngeld } =
+      await import("@/monatsplaner/Auswahloption");
     const { MONAT_MIT_MUTTERSCHUTZ } = await import("@/monatsplaner/Monat");
 
     it.each(Auswahloptionen)(

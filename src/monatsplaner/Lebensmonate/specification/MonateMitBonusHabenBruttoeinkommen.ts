@@ -20,9 +20,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("Monate mit Bonus haben bruttoeinkommen", async () => {
-    const { Elternteil, Variante, KeinElterngeld } = await import(
-      "@/monatsplaner"
-    );
+    const { Elternteil, Variante, KeinElterngeld } =
+      await import("@/monatsplaner");
 
     it("is satisfied for an empty set of Lebensmonate", () => {
       const lebensmonate = {};

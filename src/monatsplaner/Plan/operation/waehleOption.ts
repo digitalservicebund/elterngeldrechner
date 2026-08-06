@@ -59,12 +59,10 @@ if (import.meta.vitest) {
   describe("wähle Option für Plan", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
-    const vorlaeufigGueltigerPlanModule = await import(
-      "@/monatsplaner/Plan/specification/VorlaeufigGueltigerPlan"
-    );
-    const { Specification } = await import(
-      "@/monatsplaner/common/specification"
-    );
+    const vorlaeufigGueltigerPlanModule =
+      await import("@/monatsplaner/Plan/specification/VorlaeufigGueltigerPlan");
+    const { Specification } =
+      await import("@/monatsplaner/common/specification");
 
     beforeEach(() => {
       vi.spyOn(

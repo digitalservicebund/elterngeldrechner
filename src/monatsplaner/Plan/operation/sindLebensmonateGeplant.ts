@@ -44,9 +44,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("sindLebensmonateGeplant", async () => {
-    const { Elternteil, Variante, erstelleInitialeLebensmonate } = await import(
-      "@/monatsplaner"
-    );
+    const { Elternteil, Variante, erstelleInitialeLebensmonate } =
+      await import("@/monatsplaner");
 
     it("false if the plan is empty", () => {
       const plan = {

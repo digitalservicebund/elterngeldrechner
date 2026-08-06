@@ -163,8 +163,7 @@ export type GridColumnDefinitionPerElternteil = {
  * ```
  */
 type GridColumn<ColumnNames extends string> =
-  | ColumnNames
-  | [ColumnNames, ColumnNames];
+  ColumnNames | [ColumnNames, ColumnNames];
 
 type AnzahlElternteile = 1 | 2;
 

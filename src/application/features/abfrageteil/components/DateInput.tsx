@@ -113,7 +113,4 @@ function mergeRefs<Value>(...refs: ReactReference<Value>[]) {
 }
 
 type ReactReference<Value> =
-  | MutableRefObject<Value>
-  | LegacyRef<Value>
-  | undefined
-  | null;
+  MutableRefObject<Value> | LegacyRef<Value> | undefined | null;

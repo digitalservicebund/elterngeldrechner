@@ -16,9 +16,8 @@ if (import.meta.vitest) {
   describe("Partnerschaftsbonus wird nur parallel bezogen", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
-    const { Auswahloptionen, KeinElterngeld } = await import(
-      "@/monatsplaner/Auswahloption"
-    );
+    const { Auswahloptionen, KeinElterngeld } =
+      await import("@/monatsplaner/Auswahloption");
 
     it("is satisfied if no Bonus is chosen at all", () => {
       const lebensmonate = {

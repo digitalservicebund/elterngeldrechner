@@ -26,9 +26,8 @@ if (import.meta.vitest) {
   describe("irgendein Elternteil hat Option gewählt", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
-    const { Auswahloptionen, KeinElterngeld } = await import(
-      "@/monatsplaner/Auswahloption"
-    );
+    const { Auswahloptionen, KeinElterngeld } =
+      await import("@/monatsplaner/Auswahloption");
 
     it.each(Auswahloptionen)(
       "is satisfied if %s is demanded and an Elternteil has chosen it",

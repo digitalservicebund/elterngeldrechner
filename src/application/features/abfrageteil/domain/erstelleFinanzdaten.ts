@@ -45,8 +45,7 @@ type FinanzdatenBeiderElternteile = {
 };
 
 export type FinanzdatenAllerElternteile =
-  | FinanzdatenEinesElternteils
-  | FinanzdatenBeiderElternteile;
+  FinanzdatenEinesElternteils | FinanzdatenBeiderElternteile;
 
 export function erstelleFinanzDaten(
   events: FormEvent[],

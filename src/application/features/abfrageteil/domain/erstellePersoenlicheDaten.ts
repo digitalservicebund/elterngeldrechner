@@ -44,8 +44,7 @@ type PersoenlicheDatenBeiderElternteile = {
 };
 
 export type PersoenlicheDatenAllerElternteile =
-  | PersoenlicheDatenEinesElternteils
-  | PersoenlicheDatenBeiderElternteile;
+  PersoenlicheDatenEinesElternteils | PersoenlicheDatenBeiderElternteile;
 
 export function erstellePersoenlicheDaten(
   events: FormEvent[],

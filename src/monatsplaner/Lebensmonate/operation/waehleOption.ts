@@ -241,9 +241,8 @@ if (import.meta.vitest) {
   describe("wähle Option in Lebensmonaten", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
-    const { LetzteLebensmonatszahl } = await import(
-      "@/monatsplaner/Lebensmonatszahl"
-    );
+    const { LetzteLebensmonatszahl } =
+      await import("@/monatsplaner/Lebensmonatszahl");
 
     beforeEach(async () => {
       vi.spyOn(

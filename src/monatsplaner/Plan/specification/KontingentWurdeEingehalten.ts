@@ -51,12 +51,10 @@ if (import.meta.vitest) {
   describe("Kontingent wurde eingehalten", async () => {
     const { Variante } = await import("@/monatsplaner/Variante");
     const { KeinElterngeld } = await import("@/monatsplaner/Auswahloption");
-    const bestimmeVerfuegbaresKontingentModule = await import(
-      "@/monatsplaner/Ausgangslage/operation/bestimmeVerfuegbaresKontingent"
-    );
-    const zaehleVerplantesKontingentModule = await import(
-      "@/monatsplaner/Lebensmonate/operation/zaehleVerplantesKontingent"
-    );
+    const bestimmeVerfuegbaresKontingentModule =
+      await import("@/monatsplaner/Ausgangslage/operation/bestimmeVerfuegbaresKontingent");
+    const zaehleVerplantesKontingentModule =
+      await import("@/monatsplaner/Lebensmonate/operation/zaehleVerplantesKontingent");
 
     it("is satisfied if verplantes Kontingent remains below verfügbares Kontingent for defined Variante", () => {
       vi.spyOn(

@@ -80,29 +80,23 @@ if [ "$delete" = true ] && [ "$environment" != preview ]; then
   fail "--delete belongs to --preview; --$environment is replaced by the next deploy, never emptied."
 fi
 
-# A preview is a subdirectory of the staging bucket, so its profile layers on
-# top of staging's rather than replacing it.
 case "$environment" in
   staging) export MISE_ENV="staging" ;;
   production) export MISE_ENV="production" ;;
-  preview) export MISE_ENV="staging,preview" PREVIEW_NAME="$name" ;;
+  preview) export MISE_ENV="preview" PREVIEW_NAME="$name" ;;
 esac
 
 if [ "$delete" = true ]; then
-  exec mise run remove-preview
+  exec mise run unpublish-preview
 fi
 
 if [ "$rollback" = true ]; then
   exec "$(dirname "$0")/rollback.sh" "$ref"
 fi
 
-# A preview is the only deployment that publishes index.html, and that page is
-# only worth looking at with the Familienportal chrome the snapshot provides.
-# Without it the build silently falls back to a bare host page, so require the
-# snapshot instead: the task is a no-op when it is already there and fails when
-# it cannot be fetched. A root deploy uploads only index.js and never reads it.
 if [ "$environment" = preview ]; then
   mise run generate-app-wrapper
+  exec mise run publish-preview
 fi
 
-exec mise run publish
+exec mise run publish-assets

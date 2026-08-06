@@ -3,7 +3,6 @@
 [env]
 EGR_BUILD_MODE = "staging"
 EGR_BUCKET = "egr-assets-staging"
-EGR_DEPLOY_LAYOUT = "root"
 
 # The bucket and the credentials that may write to it belong to the same
 # environment, so selecting one selects the other. See fnox.toml.

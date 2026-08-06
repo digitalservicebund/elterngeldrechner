@@ -30,11 +30,11 @@ mise trust --quiet
 mise install
 mise exec -- npm ci --ignore-scripts
 
-# The build precondition sits on the `publish` task (`depends = ["build"]` in
-# mise.toml) and deliberately not here, where it would build the current
-# checkout before the worktree even exists.
+# The build precondition sits on the `publish-assets` task (`depends =
+# ["build"]` in mise.toml) and deliberately not here, where it would build the
+# current checkout before the worktree even exists.
 #
 # VITE_BUILD_VERSION becomes the data-build attribute the smoke test compares,
 # so it carries the resolved commit; a tag name would not identify a build
 # unambiguously.
-VITE_BUILD_VERSION="$(git rev-parse HEAD)" mise run publish
+VITE_BUILD_VERSION="$(git rev-parse HEAD)" mise run publish-assets

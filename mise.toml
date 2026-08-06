@@ -63,13 +63,24 @@ run = "fnox exec -- npm run --silent posthog:schema:pull"
 
 [tasks.build]
 description = "Build the widget for the environment selected with MISE_ENV"
-run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=staging or MISE_ENV=production}'
+run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=staging, production or preview}'
 
-[tasks.publish]
+[tasks.publish-assets]
 hide = true # Reached through scripts/deploy.sh, which selects the environment first.
-description = "Build, verify and upload into the bucket of the selected environment"
-run = ["scripts/check-build-artifacts.sh", "fnox exec --no-defaults -- scripts/upload-build.sh"]
+description = "Build, verify and upload the widget into the bucket root"
+run = ["scripts/check-build-artifacts.sh", "fnox exec --no-defaults -- scripts/upload-asset-build.sh"]
 depends = ["build"]
+
+[tasks.publish-preview]
+hide = true # Reached through scripts/deploy.sh, which selects the environment first.
+description = "Build, verify and upload the standalone preview page"
+run = ["scripts/check-build-artifacts.sh", "fnox exec --no-defaults -- scripts/upload-preview-build.sh"]
+depends = ["build"]
+
+[tasks.unpublish-preview]
+hide = true # Reached through scripts/deploy.sh, which selects the environment first.
+description = "Delete the preview from the staging bucket"
+run = "fnox exec --no-defaults -- scripts/remove-preview.sh"
 
 [tasks.start]
 description = "Serve the widget inside the Familienportal host page snapshot"

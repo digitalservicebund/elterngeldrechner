@@ -15,7 +15,6 @@
     "format": "f() { prettier --ignore-unknown --check ${@:-.}; }; f",
     "format-fix": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "format-list": "f() { prettier --ignore-unknown --list-different ${@:-.}; }; f",
-    "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",
     "type-check": "tsc",
     "lint": "oxlint --deny-warnings --no-error-on-unmatched-pattern",
     "lint-fix": "oxlint --fix --no-error-on-unmatched-pattern",

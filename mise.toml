@@ -24,7 +24,11 @@ includes = ["scripts"]
 
 [tasks.check]
 description = "Every check that has to pass before a commit"
-depends = ["type-check", "lint", "stylelint", "test"]
+depends = ["format", "type-check", "lint", "stylelint", "test"]
+
+[tasks.format]
+description = "Check formatting with prettier"
+run = "npm run --silent format"
 
 [tasks.type-check]
 description = "Type-check the project with tsc"
@@ -40,7 +44,7 @@ run = "npm run --silent stylelint"
 
 [tasks.test]
 description = "Run the vitest suite"
-run = "npm run --silent test -- --reporter=minimal"
+run = "npm run --silent test"
 
 [tasks.link-check]
 description = "Check the external links in the sources and the documentation"

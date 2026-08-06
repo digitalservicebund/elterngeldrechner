@@ -21,4 +21,4 @@ fi
 : "${EGR_BUCKET:?the selected environment declares no bucket}"
 : "${PREVIEW_NAME:?a preview needs PREVIEW_NAME to know its subdirectory}"
 
-aws s3 rm "s3://${EGR_BUCKET}/preview/${PREVIEW_NAME}" --recursive
+exec fnox exec --no-defaults -- aws s3 rm "s3://${EGR_BUCKET}/preview/${PREVIEW_NAME}" --recursive

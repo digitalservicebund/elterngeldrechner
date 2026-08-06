@@ -1,0 +1,18 @@
+#:schema https://fnox.jdx.dev/schema.json
+
+env = "exec"
+if_missing = "error"
+
+[providers]
+onepassword = { type = "1password", vault = "Elterngeld Engineering" }
+
+[secrets]
+POSTHOG_CLI_API_KEY = { provider = "onepassword", value = "Posthog/credential", description = "PostHog personal API key, used by posthog-cli to pull the event schema" }
+
+[profiles.staging.secrets]
+AWS_ACCESS_KEY_ID = { provider = "onepassword", value = "Platform Staging Object Storage/username", description = "Access key id of the staging bucket" }
+AWS_SECRET_ACCESS_KEY = { provider = "onepassword", value = "Platform Staging Object Storage/credential", description = "Secret key of the staging bucket" }
+
+[profiles.production.secrets]
+AWS_ACCESS_KEY_ID = { provider = "onepassword", value = "Platform Production Object Storage/username", description = "Access key id of the production bucket" }
+AWS_SECRET_ACCESS_KEY = { provider = "onepassword", value = "Platform Production Object Storage/credential", description = "Secret key of the production bucket" }

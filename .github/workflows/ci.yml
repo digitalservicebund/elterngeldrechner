@@ -59,10 +59,15 @@ jobs:
           path: .app-wrapper
           key: app-wrapper-snapshot
 
+      # fnox resolves the bucket credentials through the 1Password CLI, which
+      # picks up OP_SERVICE_ACCOUNT_TOKEN by itself, so the pipeline resolves the
+      # same fnox.toml a developer does.
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@1a3160d5e9de1ae0803eaa08a88746f5ae3daa50 #v4.1.0
+
       - name: Deploy the preview of the main branch
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: mise run deploy --preview --name main
 
       - name: Report deployment for statistics
@@ -83,10 +88,12 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@1a3160d5e9de1ae0803eaa08a88746f5ae3daa50 #v4.1.0
+
       - name: Deploy to the staging environment
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           VITE_BUILD_VERSION: ${{ github.sha }}
         run: mise run deploy --staging
 
@@ -155,10 +162,12 @@ jobs:
 
       - uses: ./.github/actions/setup-toolchain
 
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@1a3160d5e9de1ae0803eaa08a88746f5ae3daa50 #v4.1.0
+
       - name: Deploy to the production environment
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           VITE_BUILD_VERSION: ${{ github.sha }}
         run: mise run deploy --production
 

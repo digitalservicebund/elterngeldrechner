@@ -6,6 +6,7 @@ minimum_release_age = "7d"
 node = "24.18.0"
 
 awscli = "2.36.13"
+fnox = "1.31.1"
 git-cliff = "2.13.1"
 hk = "1.53.0"
 jq = "1.8.2"
@@ -17,6 +18,9 @@ minimum_release_age = "1d"
 
 [env]
 AWS_ENDPOINT_URL = "https://object.storage.eu01.onstackit.cloud"
+
+POSTHOG_CLI_HOST = "https://eu.posthog.com"
+POSTHOG_CLI_PROJECT_ID = "118340"
 
 [task_config]
 includes = ["scripts"]
@@ -49,6 +53,14 @@ run = "npm run --silent test"
 description = "Check the external links in the sources and the documentation"
 run = 'lychee --no-progress . "src/**/*.ts" "src/**/*.tsx"'
 
+[tasks.check-posthog-schema]
+description = "Report whether the generated PostHog schema still matches the project"
+run = "fnox exec -- npm run --silent posthog:schema:status"
+
+[tasks.pull-posthog-schema]
+description = "Regenerate the typed PostHog schema from the project"
+run = "fnox exec -- npm run --silent posthog:schema:pull"
+
 [tasks.build]
 description = "Build the widget for the environment selected with MISE_ENV"
 run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=staging or MISE_ENV=production}'
@@ -56,7 +68,7 @@ run = 'npm run build:${EGR_BUILD_MODE:?no environment selected, use MISE_ENV=sta
 [tasks.publish]
 hide = true # Reached through scripts/deploy.sh, which selects the environment first.
 description = "Build, verify and upload into the bucket of the selected environment"
-run = ["scripts/check-build-artifacts.sh", "scripts/upload-build.sh"]
+run = ["scripts/check-build-artifacts.sh", "fnox exec --no-defaults -- scripts/upload-build.sh"]
 depends = ["build"]
 
 [tasks.start]
@@ -78,7 +90,7 @@ run = "trivy --quiet filesystem . --include-dev-deps --severity HIGH,CRITICAL --
 
 [tasks.audit-secrets]
 description = "Scan the working tree for committed secrets with trivy"
-run = 'trivy --quiet filesystem . --scanners secret --skip-files "**/.env*" --exit-code 1'
+run = 'trivy --quiet filesystem . --scanners secret --exit-code 1'
 
 [tasks.generate-sbom]
 description = "Write a software bill of materials to sbom.spdx.json"

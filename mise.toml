@@ -67,7 +67,7 @@ run = "npm start"
 
 [tasks.audit]
 description = "Collection of all audits in our project"
-depends = ["audit-licenses", "audit-vulnerabilities"]
+depends = ["audit-licenses", "audit-vulnerabilities", "audit-secrets"]
 
 [tasks.audit-licenses]
 description = "Check dependency licences against ./allowed-licenses"
@@ -76,6 +76,10 @@ run = "npm run --silent audit-licenses"
 [tasks.audit-vulnerabilities]
 description = "Scan the working tree for known vulnerabilities with trivy"
 run = "trivy --quiet filesystem . --include-dev-deps --severity HIGH,CRITICAL --exit-code 1"
+
+[tasks.audit-secrets]
+description = "Scan the working tree for committed secrets with trivy"
+run = 'trivy --quiet filesystem . --scanners secret --skip-files "**/.env*" --exit-code 1'
 
 [tasks.generate-sbom]
 description = "Write a software bill of materials to sbom.spdx.json"

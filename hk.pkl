@@ -5,28 +5,24 @@ import "package://github.com/jdx/hk/releases/download/v1.53.0/hk@1.53.0#/Builtin
 // before the later steps report, so one error can hide all the others.
 fail_fast = false
 
-local allSteps = new Mapping<String, Step | Group> {
-  ["code"] = new Group {
-    prefix = "npm exec --"
-    steps {
-      ["format"] = (Builtins.prettier) {
-        check = "prettier --check {{files}}"
-        check_list_files = "prettier --list-different {{files}}"
-        fix = "prettier --write {{files}}"
-      }
-      ["stylelint"] = (Builtins.stylelint) {
-        glob = "src/**/*.css"
-      }
-      ["type-check"] = Builtins.tsc
-      ["lint"] = Builtins.ox_lint
-    }
+// Every step calls the script or task that owns the tool's flags, so the
+// hook cannot drift from what the pipeline and `mise run check` execute.
+local allSteps = new Mapping<String, Step> {
+  ["format"] = (Builtins.prettier) {
+    check = "npm run --silent format {{files}}"
+    check_list_files = "npm run --silent format-list {{files}}"
+    fix = "npm run --silent format-fix {{files}}"
   }
-  ["audit-licenses"] {
-    glob = List("package.json", "package-lock.json", "allowed-licenses", "license-clarifications.json")
-    check = "npm run --silent audit-licenses"
+  ["stylelint"] = (Builtins.stylelint) {
+    glob = "src/**/*.css"
+    check = "npm run --silent stylelint {{files}}"
   }
-  ["secret-scan"] {
-    check = #"trivy --quiet filesystem . --scanners secret --skip-files "**/.env*" --exit-code 1"#
+  ["type-check"] = (Builtins.tsc) {
+    check = "npm run --silent type-check"
+  }
+  ["lint"] = (Builtins.ox_lint) {
+    check = "npm run --silent lint {{files}}"
+    fix = "npm run --silent lint-fix {{files}}"
   }
 }
 

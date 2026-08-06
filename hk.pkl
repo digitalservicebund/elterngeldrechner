@@ -43,4 +43,9 @@ hooks {
   ["check"] {
     steps = allSteps
   }
+
+  ["fix"] {
+    fix = true
+    steps = allSteps
+  }
 }

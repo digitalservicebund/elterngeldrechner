@@ -16,8 +16,8 @@ detailed information about the project and its components, the following sources
 - **[mise](https://mise.jdx.dev)**: manages the development toolchain, provides the required environment variables, and exposes
   the tasks described below. Install it with `brew install mise`, then activate it in your shell (see the
   [mise docs](https://mise.jdx.dev/getting-started.html)).
-- **1 Password CLI + Vault Access**: To trigger deployments from your development machine, install the `1password-cli`, enable
-  the integration between the app and cli, and ensure you have access to the **Elterngeld Engineering** vault.
+- **1 Password CLI + Vault Access**: To trigger deployments from your development machine the integration between the 1password
+  app and the cli must be anabled and you must have access to the **Elterngeld Engineering** vault.
 
 ## Setup
 

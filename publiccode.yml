@@ -19,13 +19,13 @@ description:
       - "Übertragung von Daten in den digitalen Elterngeldantrag"
 legal:
   license: EUPL-1.2
-  mainCopyrightOwner: Bundesministerium für Familie, Senioren, Frauen und Jugend
+  mainCopyrightOwner: Bundesministerium für Bildung, Familie, Senioren, Frauen und Jugend
   repoOwner: DigitalService GmbH des Bundes
 maintenance:
   type: contract
   contractors:
     - name: DigitalService GmbH des Bundes
-      until: 2025-02-28
+      until: 2026-12-31
       website: https://digitalservice.bund.de
 localisation:
   localisationReady: false

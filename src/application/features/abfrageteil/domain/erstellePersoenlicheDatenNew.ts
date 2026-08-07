@@ -98,6 +98,11 @@ function findeErwerbsartVorGeburt(
     elternteilIndex,
   );
 
+  // Nur istGesetzlichRentenversichert entscheidet MIT_SOZI vs. OHNE_SOZI,
+  // weil brutto-netto-rechner.ts (abzuege/nettoEinkommenZwischenErgebnis)
+  // für OHNE_SOZI ohnehin sowohl renten- als auch krankenversicherungspflichtig
+  // auf false erzwingt, unabhängig von istGesetzlichKrankenpflichtversichert.
+  // Die separate KV-Angabe hat für diese Klassifikation daher keinen Einfluss.
   if (sozialversicherungen.istGesetzlichRentenversichert) {
     return ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
   }

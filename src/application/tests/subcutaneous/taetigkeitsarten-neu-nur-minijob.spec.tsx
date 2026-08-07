@@ -27,14 +27,8 @@ afterEach(() => {
  * Anstellt-Checkbox plus eine nachgelagerte Minijob-Nachfrage erfassen.
  * Erwartet dieselben Elterngeldbezüge wie das alte Referenzszenario, um
  * Flow-Parität nachzuweisen.
- *
- * Als .fails markiert: erstelleFinanzdatenNew.ts kennt die neuen Routen
- * (ElternteilTaetigkeitenAngestelltHauptjob usw.) noch nicht und wirft
- * "No Taetigkeit events found". Sobald diese Anbindung existiert, schlägt
- * dieser Test unerwartet grün fehl (im Sinne von .fails) und .fails kann
- * entfernt werden.
  */
-test.fails("Tätigkeitsarten (neuer Einkommensflow): nur Minijob", async () => {
+test("Tätigkeitsarten (neuer Einkommensflow): nur Minijob", async () => {
   const user = userEvent.setup();
 
   const render = useRender();

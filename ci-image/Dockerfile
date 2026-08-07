@@ -26,7 +26,9 @@ RUN apt-get update \
 
 WORKDIR /out
 
-RUN curl --fail --silent --show-error --location --output mise.tar.gz \
+RUN curl --fail --silent --show-error --location \
+      --proto '=https' --proto-redir '=https' --tlsv1.2 \
+      --output mise.tar.gz \
       "https://github.com/jdx/mise/releases/download/v${MISE_VERSION}/mise-v${MISE_VERSION}-linux-x64.tar.gz" \
     && printf '%s  mise.tar.gz\n' "${MISE_SHA256}" | sha256sum --check --strict - \
     && tar --extract --gzip --file mise.tar.gz --strip-components=2 mise/bin/mise \

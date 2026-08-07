@@ -49,6 +49,11 @@ public/*.html
 # locally generated host-page snapshot (see scripts/generate-app-wrapper.sh)
 /.app-wrapper/
 
+# The pipeline points mise and npm here, because GitLab can only cache paths
+# inside the project directory (see .gitlab-ci.yml).
+/.mise/
+/.npm/
+
 /sbom.spdx.json
 
 # playwright

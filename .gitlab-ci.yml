@@ -1,0 +1,41 @@
+default:
+  image: registry.opencode.de/digitalservicebund/elterngeldrechner/ci:2026.8.0@sha256:38f5364dfbb4f1de3b1bac70b1bd7352a7656b68a2f91697938cb79d20966aa6
+  interruptible: true
+
+variables:
+  # GitLab only caches paths inside the project directory, so mise's data and
+  # cache directories have to be moved there. Left at their defaults under
+  # $HOME the cache block below would silently do nothing and every job
+  # would download the whole toolchain again.
+  MISE_DATA_DIR: $CI_PROJECT_DIR/.mise/data
+  MISE_CACHE_DIR: $CI_PROJECT_DIR/.mise/cache
+  npm_config_cache: $CI_PROJECT_DIR/.npm
+
+  # mise refuses to read a config it does not trust, and there is no shell
+  # activation in CI to trust it interactively. Naming the project directory
+  # covers mise.toml and the mise.<environment>.toml files the deploy jobs
+  # will later select with MISE_ENV.
+  MISE_TRUSTED_CONFIG_PATHS: $CI_PROJECT_DIR
+
+stages:
+  - probe
+
+check:
+  stage: probe
+  timeout: 15m
+  cache:
+    - key:
+        files:
+          - mise.lock
+      paths:
+        - .mise/data
+    - key:
+        files:
+          - package-lock.json
+      paths:
+        - .npm
+  script:
+    - mise install
+    - export PATH="$MISE_DATA_DIR/shims:$PATH"
+    - npm ci --ignore-scripts
+    - mise run --continue-on-error check

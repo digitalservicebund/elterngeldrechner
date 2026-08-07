@@ -36,6 +36,7 @@ url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.36.13.zip"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-aarch64-2.36.13.zip"
 
 [tools.awscli."platforms.linux-x64"]
+checksum = "blake3:3cc5f7ff8488a0cf5103fa4e9ec5c8fe8f1396db15fc80ae7e0ff0f2cc2ad240"
 url = "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.13.zip"
 
 [tools.awscli."platforms.linux-x64-musl"]
@@ -69,6 +70,7 @@ checksum = "sha256:f87808cb1b5db2382daf244ced84f342ab01352654df2f50faa1cd1565941
 url = "https://github.com/jdx/fnox/releases/download/v1.31.1/fnox-x86_64-unknown-linux-gnu.tar.gz"
 url_api = "https://api.github.com/repos/jdx/fnox/releases/assets/488427453"
 provenance = "github-attestations"
+provenance_verified = true
 
 [tools.fnox."platforms.linux-x64-musl"]
 checksum = "sha256:32e16ce164736a834ce767908ec2fe4d3f17b77d71a7187b2f0f973c161da518"

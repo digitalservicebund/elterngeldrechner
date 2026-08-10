@@ -1,0 +1,115 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+
+  extends: [
+    "config:recommended",
+
+    // Every bump arrives as chore(deps), the type dependabot used and the one
+    // the commit-msg hook accepts. Renovate would otherwise commit updates of
+    // runtime dependencies as fix, which announces a dependency bump as a fix
+    // of this project in the release notes git-cliff renders.
+    ":semanticCommitTypeAll(chore)",
+  ],
+
+  // Dependabot's cooldown, read as the age a release has to reach before it is
+  // proposed here. A release that is broken or compromised is usually withdrawn
+  // within days, and no dependency of ours is urgent enough to skip that wait.
+  minimumReleaseAge: "5 days",
+
+  // The pipeline that runs renovate is scheduled once a day, so an hourly cap
+  // would not spread the merge requests out over the day. It would only limit
+  // how much of the backlog a single run may open.
+  prHourlyLimit: 0,
+
+  packageRules: [
+    {
+      matchUpdateTypes: ["major"],
+      minimumReleaseAge: "14 days",
+    },
+    {
+      matchUpdateTypes: ["minor"],
+      minimumReleaseAge: "7 days",
+    },
+    {
+      matchUpdateTypes: ["patch"],
+      minimumReleaseAge: "3 days",
+    },
+
+    // mise refuses to install a release younger than the minimum_release_age
+    // of mise.toml, so a tool proposed before that age could not be installed
+    // by the very pipeline that has to verify the update. Both numbers mirror
+    // the settings there and have to move with them.
+    {
+      matchManagers: ["mise"],
+      minimumReleaseAge: "7 days",
+    },
+    {
+      matchManagers: ["mise"],
+      matchDepNames: ["trivy"],
+      minimumReleaseAge: "1 day",
+    },
+
+    // Packages that only ever move together, so their updates are reviewed
+    // and verified together as well.
+    {
+      groupName: "react",
+      matchPackageNames: [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom",
+      ],
+    },
+    {
+      groupName: "testing-library",
+      matchPackageNames: ["@testing-library/*"],
+    },
+    {
+      groupName: "hookform",
+      matchPackageNames: ["react-hook-form", "@hookform/*"],
+    },
+    {
+      groupName: "date-fns",
+      matchPackageNames: ["date-fns", "@date-fns/*"],
+    },
+    {
+      groupName: "vite",
+      matchPackageNames: ["vite", "@vitejs/*", "vitest"],
+    },
+    {
+      groupName: "oxlint",
+      matchPackageNames: ["oxlint", "oxlint-*"],
+    },
+
+    // Tailwind 4 replaced the configuration file with CSS directives, so the
+    // upgrade is a piece of work rather than a merge request to review. Held
+    // at 3 until that work is scheduled.
+    {
+      matchPackageNames: ["tailwindcss", "@tailwindcss/*"],
+      enabled: false,
+    },
+
+    // The base image of the pipeline carries the mise version it is tagged
+    // with and is built and pushed by hand. A merge request for a digest
+    // nobody has built would not be actionable, so only the image renovate
+    // runs in is followed here.
+    {
+      matchManagers: ["gitlabci"],
+      enabled: false,
+    },
+    {
+      matchManagers: ["gitlabci"],
+      matchDepNames: ["renovate/renovate"],
+      enabled: true,
+    },
+  ],
+
+  // Renovate learns about vulnerable versions from the OSV database, which
+  // needs no platform integration.
+  // Their fixes skip the cooldown above: waiting out a release that closes
+  // a published vulnerability trades a hypothetical risk for a known one.
+  osvVulnerabilityAlerts: true,
+  vulnerabilityAlerts: {
+    minimumReleaseAge: null,
+  },
+}

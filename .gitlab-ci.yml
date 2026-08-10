@@ -115,7 +115,7 @@ secret-scan:
 # dependencies alone, from medium severity upwards. Leaving the build
 # tools out is what makes that threshold affordable, since their
 # findings cannot be exploited through the deployed widget.
-vulnarability-scan:
+vulnerability-scan:
   extends: .node-tools
   stage: test
   script: mise run audit-runtime-vulnerabilities

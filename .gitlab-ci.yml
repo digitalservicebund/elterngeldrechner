@@ -62,18 +62,45 @@ stages:
     - *mise-install
     - npm ci --ignore-scripts
 
-check:
+test:
   extends: .node-tools
   stage: test
-  # The same task the pre-commit hook and a local run execute, so a green
-  # working copy cannot turn red here. Continuing past a failing step
-  # reports every problem in one run instead of only the first.
-  script: mise run --continue-on-error check
+  script: mise run test
 
-audit:
+stylelint:
   extends: .node-tools
   stage: test
-  script: mise run --continue-on-error audit
+  script: mise run stylelint
+
+lint:
+  extends: .node-tools
+  stage: test
+  script: mise run lint
+
+type-check:
+  extends: .node-tools
+  stage: test
+  script: mise run type-check
+
+format:
+  extends: .node-tools
+  stage: test
+  script: mise run format
+
+license-check:
+  extends: .node-tools
+  stage: test
+  script: mise run audit-licenses
+
+secret-scan:
+  extends: .node-tools
+  stage: test
+  script: mise run audit-secrets
+
+vulnarability-scan:
+  extends: .node-tools
+  stage: test
+  script: mise run audit-vulnerabilities
 
 # Compiles the widget without publishing it. MISE_ENV picks the build mode and
 # the base path, neither of which needs bucket credentials, so this stays free

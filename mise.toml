@@ -98,8 +98,16 @@ description = "Check dependency licences against ./allowed-licenses"
 run = "npm run --silent audit-licenses"
 
 [tasks.audit-vulnerabilities]
-description = "Scan the working tree for known vulnerabilities with trivy"
-run = "trivy --quiet filesystem . --include-dev-deps --severity MEDIUM,HIGH,CRITICAL --exit-code 1"
+description = "Every check that has to pass before a commit"
+depends = ["audit-critical-vulnerabilities", "audit-all-vulnerabilities"]
+
+[tasks.audit-critical-vulnerabilities]
+description = "Scans only the production dependencies with high and critical severity"
+run = "trivy --quiet filesystem . --severity HIGH,CRITICAL --exit-code 1"
+
+[tasks.audit-all-vulnerabilities]
+description = "Scans production and dev dependencies with severity from medium to critical"
+run = "trivy --quiet filesystem .  --include-dev-deps --severity MEDIUM,HIGH,CRITICAL --exit-code 1"
 
 [tasks.audit-secrets]
 description = "Scan the working tree for committed secrets with trivy"

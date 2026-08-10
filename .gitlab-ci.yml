@@ -62,19 +62,23 @@ stages:
     - *mise-install
     - npm ci --ignore-scripts
 
+# The scheduled pipeline exists for the full vulnerability scan alone, so every
+# other job names this condition to stay out of it.
+.pipeline-rules:
+  not-scheduled: &not-scheduled
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+
 check:
   extends: .node-tools
   stage: test
   script: mise run --continue-on-error check
-  except:
-    - schedules
+  rules: *not-scheduled
 
 audit:
   extends: .node-tools
   stage: test
   script: mise run --continue-on-error audit
-  except:
-    - schedules
+  rules: *not-scheduled
 
 # Compiles the widget without publishing it. MISE_ENV picks the build mode and
 # the base path, neither of which needs bucket credentials, so this stays free
@@ -87,8 +91,7 @@ build:
   variables:
     MISE_ENV: production
   script: mise run build
-  except:
-    - schedules
+  rules: *not-scheduled
 
 # Runs on the toolchain alone: trivy builds the bill from package-lock.json, so
 # installing the dependencies would only add time to the job.
@@ -101,8 +104,7 @@ generate-sbom:
     paths:
       - sbom.spdx.json
     expire_in: 30 days
-  except:
-    - schedules
+  rules: *not-scheduled
 
 # All vulnerabilities means scanning the full filesystem
 # including the devDependencies on all security issue levels.
@@ -110,5 +112,5 @@ daily-vulnerability-scan:
   extends: .mise-tools
   stage: test
   script: mise run audit-all-vulnerabilities
-  only:
-    - schedules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"

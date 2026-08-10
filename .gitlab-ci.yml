@@ -40,7 +40,7 @@ stages:
       paths:
         - .mise/data
   before_script: &mise-install
-    - mise install
+    - mise install --locked
     # Nothing activates mise in CI, so the shims the install just wrote have to
     # reach PATH explicitly before any task runs.
     - export PATH="$MISE_DATA_DIR/shims:$PATH"

@@ -111,13 +111,14 @@ secret-scan:
   except:
     - schedules
 
-# Critical vulnerability means everything that reaches the
-# deployment artifact (no devDependencies) which severity
-# is at least high or even critical.
+# Gates the push on what actually reaches the browser: the runtime
+# dependencies alone, from medium severity upwards. Leaving the build
+# tools out is what makes that threshold affordable, since their
+# findings cannot be exploited through the deployed widget.
 vulnarability-scan:
   extends: .node-tools
   stage: test
-  script: mise run audit-critical-vulnerabilities
+  script: mise run audit-runtime-vulnerabilities
   except:
     - schedules
 

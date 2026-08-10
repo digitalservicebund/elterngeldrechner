@@ -97,9 +97,9 @@ depends = ["audit-licenses", "audit-all-vulnerabilities", "audit-secrets"]
 description = "Check dependency licences against ./allowed-licenses"
 run = "npm run --silent audit-licenses"
 
-[tasks.audit-critical-vulnerabilities]
-description = "Scans only the production dependencies with high and critical severity"
-run = "trivy --quiet filesystem . --severity HIGH,CRITICAL --exit-code 1"
+[tasks.audit-runtime-vulnerabilities]
+description = "Scans the dependencies that reach the bundle, medium severity and up"
+run = "trivy --quiet filesystem . --severity MEDIUM,HIGH,CRITICAL --exit-code 1"
 
 [tasks.audit-all-vulnerabilities]
 description = "Scans production and dev dependencies with severity from medium to critical"

@@ -62,63 +62,17 @@ stages:
     - *mise-install
     - npm ci --ignore-scripts
 
-test:
+check:
   extends: .node-tools
   stage: test
-  script: mise run test
+  script: mise run --continue-on-error check
   except:
     - schedules
 
-stylelint:
+audit:
   extends: .node-tools
   stage: test
-  script: mise run stylelint
-  except:
-    - schedules
-
-lint:
-  extends: .node-tools
-  stage: test
-  script: mise run lint
-  except:
-    - schedules
-
-type-check:
-  extends: .node-tools
-  stage: test
-  script: mise run type-check
-  except:
-    - schedules
-
-format:
-  extends: .node-tools
-  stage: test
-  script: mise run format
-  except:
-    - schedules
-
-license-check:
-  extends: .node-tools
-  stage: test
-  script: mise run audit-licenses
-  except:
-    - schedules
-
-secret-scan:
-  extends: .node-tools
-  stage: test
-  script: mise run audit-secrets
-  except:
-    - schedules
-
-# Gates the push on what actually reaches the browser: the runtime
-# dependencies alone, from medium severity upwards. Leaving the build
-# tools out is what makes that threshold affordable, since their
-# findings cannot be exploited through the deployed widget.
-vulnerability-scan:
-  extends: .node-tools
-  stage: test
-  script: mise run audit-runtime-vulnerabilities
+  script: mise run --continue-on-error audit
   except:
     - schedules
 

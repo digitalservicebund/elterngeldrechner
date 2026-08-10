@@ -91,7 +91,7 @@ run = "npm start"
 
 [tasks.audit]
 description = "Collection of all audits in our project"
-depends = ["audit-licenses", "audit-vulnerabilities", "audit-secrets"]
+depends = ["audit-licenses", "audit-all-vulnerabilities", "audit-secrets"]
 
 [tasks.audit-licenses]
 description = "Check dependency licences against ./allowed-licenses"

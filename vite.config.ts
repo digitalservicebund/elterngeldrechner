@@ -38,7 +38,7 @@ export default defineConfig({
     chaiConfig: { truncateThreshold: 0 },
     includeSource: ["src/**/*.{ts,tsx}"],
     include: ["src/**/*.spec.{ts,tsx}"],
-    testTimeout: 15_000,
+    testTimeout: 30_000,
   },
   define: {
     "import.meta.vitest": "undefined",

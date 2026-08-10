@@ -66,41 +66,60 @@ test:
   extends: .node-tools
   stage: test
   script: mise run test
+  except:
+    - schedules
 
 stylelint:
   extends: .node-tools
   stage: test
   script: mise run stylelint
+  except:
+    - schedules
 
 lint:
   extends: .node-tools
   stage: test
   script: mise run lint
+  except:
+    - schedules
 
 type-check:
   extends: .node-tools
   stage: test
   script: mise run type-check
+  except:
+    - schedules
 
 format:
   extends: .node-tools
   stage: test
   script: mise run format
+  except:
+    - schedules
 
 license-check:
   extends: .node-tools
   stage: test
   script: mise run audit-licenses
+  except:
+    - schedules
 
 secret-scan:
   extends: .node-tools
   stage: test
   script: mise run audit-secrets
+  except:
+    - schedules
 
+# Critical vulnerability means everything that reaches the
+# deployment artifact (no devDependencies) which severity
+# is at least high or even critical.
 vulnarability-scan:
   extends: .node-tools
   stage: test
   script: mise run audit-critical-vulnerabilities
+  except:
+    - schedules
 
 # Compiles the widget without publishing it. MISE_ENV picks the build mode and
 # the base path, neither of which needs bucket credentials, so this stays free
@@ -113,6 +132,8 @@ build:
   variables:
     MISE_ENV: production
   script: mise run build
+  except:
+    - schedules
 
 # Runs on the toolchain alone: trivy builds the bill from package-lock.json, so
 # installing the dependencies would only add time to the job.
@@ -125,3 +146,14 @@ generate-sbom:
     paths:
       - sbom.spdx.json
     expire_in: 30 days
+  except:
+    - schedules
+
+# All vulnerabilities means scanning the full filesystem
+# including the devDependencies on all security issue levels.
+daily-vulnerability-scan:
+  extends: .node-tools
+  stage: test
+  script: mise run audit-all-vulnerabilities
+  only:
+    - schedules

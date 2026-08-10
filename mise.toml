@@ -12,7 +12,7 @@ hk = "1.53.0"
 jq = "1.8.2"
 lychee = "0.24.2"
 1password-cli = "2.38.1"
-glab = "latest"
+glab = "1.111.0"
 
 [tools.trivy]
 version = "0.72.0"

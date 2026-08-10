@@ -103,7 +103,7 @@ run = "trivy --quiet filesystem . --severity HIGH,CRITICAL --exit-code 1"
 
 [tasks.audit-all-vulnerabilities]
 description = "Scans production and dev dependencies with severity from medium to critical"
-run = "trivy --quiet filesystem .  --include-dev-deps --severity MEDIUM,HIGH,CRITICAL --exit-code 1"
+run = "trivy --quiet filesystem .  --include-dev-deps --exit-code 1"
 
 [tasks.audit-secrets]
 description = "Scan the working tree for committed secrets with trivy"

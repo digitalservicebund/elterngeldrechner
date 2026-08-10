@@ -131,6 +131,9 @@ if (import.meta.vitest) {
     beforeEach(() => {
       // Satisfy assumption for tag manager script injection (necessary?)
       document.body.innerHTML = "<script src='main.js' />";
+
+      vi.stubEnv("VITE_PUBLIC_POSTHOG_PROJECT_TOKEN", "");
+      vi.stubEnv("VITE_PUBLIC_POSTHOG_HOST", "");
     });
 
     const originalCookies = document.cookie;

@@ -51,7 +51,7 @@
     "node-xlsx": "^0.24.0",
     "original-rechner": "github:digitalservicebund/elterngeldrechner-legacy#69ad27a02bb5105e10890338845cf21b727a0c27",
     "oxlint": "^1.75.0",
-    "oxlint-tsgolint": "^0.25.0",
+    "oxlint-tsgolint": "^7.0.2001",
     "postcss": "^8.5.24",
     "prettier": "^3.9.6",
     "stylelint": "^17.14.1",

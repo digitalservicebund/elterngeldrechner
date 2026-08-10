@@ -1,0 +1,15 @@
+# Trivy is the only tool in the check gate that does not read .gitignore,
+# so the generated caches have to be named here.
+#
+# On GitLab they are unavoidable: caching only works inside the project
+# directory, so the toolchain and the npm download cache sit next to the
+# sources (see .gitlab-ci.yml).
+#
+# Neither belongs to the project's supply chain, and the secret scanner
+# spends minutes walking the npm cache's content-addressed store to say
+# so.
+
+scan:
+  skip-dirs:
+    - .mise
+    - .npm

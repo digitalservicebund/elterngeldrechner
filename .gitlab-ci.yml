@@ -17,25 +17,84 @@ variables:
   # will later select with MISE_ENV.
   MISE_TRUSTED_CONFIG_PATHS: $CI_PROJECT_DIR
 
+# The levels of the pipeline's dependency graph: nothing deploys before the
+# checks pass, nothing is verified before it is deployed, and nothing is
+# released before it is verified. The last three are declared ahead of the jobs
+# that will fill them, since GitLab hides a stage that has no jobs.
 stages:
-  - probe
+  - test
+  - deploy
+  - verify
+  - release
 
-check:
-  stage: probe
+# Just the tools pinned in mise.lock, for the jobs that describe or check the
+# lockfiles rather than an installed dependency tree.
+.mise-tools:
   timeout: 15m
   cache:
-    - key:
+    - &mise-cache
+      key:
+        prefix: mise
         files:
           - mise.lock
       paths:
         - .mise/data
+  before_script: &mise-install
+    - mise install
+    # Nothing activates mise in CI, so the shims the install just wrote have to
+    # reach PATH explicitly before any task runs.
+    - export PATH="$MISE_DATA_DIR/shims:$PATH"
+
+# The same tools plus the project's dependencies, for the jobs that need that
+# installed tree. Each cache is keyed on the lockfile that decides its contents,
+# so a bump invalidates only the cache it affects.
+.node-tools:
+  extends: .mise-tools
+  cache:
+    - *mise-cache
     - key:
+        prefix: npm
         files:
           - package-lock.json
       paths:
         - .npm
-  script:
-    - mise install
-    - export PATH="$MISE_DATA_DIR/shims:$PATH"
+  before_script:
+    - *mise-install
     - npm ci --ignore-scripts
-    - mise run --continue-on-error check
+
+check:
+  extends: .node-tools
+  stage: test
+  # The same task the pre-commit hook and a local run execute, so a green
+  # working copy cannot turn red here. Continuing past a failing step
+  # reports every problem in one run instead of only the first.
+  script: mise run --continue-on-error check
+
+audit:
+  extends: .node-tools
+  stage: test
+  script: mise run --continue-on-error audit
+
+# Compiles the widget without publishing it. MISE_ENV picks the build mode and
+# the base path, neither of which needs bucket credentials, so this stays free
+# of side effects while covering the strictest of the three modes. No entry
+# point has to be prepared: the app-wrapper plugin writes index.html during the
+# build and falls back to a bare host page when no snapshot is cached.
+build:
+  extends: .node-tools
+  stage: test
+  variables:
+    MISE_ENV: production
+  script: mise run build
+
+# Runs on the toolchain alone: trivy builds the bill from package-lock.json, so
+# installing the dependencies would only add time to the job.
+generate-sbom:
+  extends: .mise-tools
+  stage: test
+  script: mise run generate-sbom
+  artifacts:
+    name: sbom
+    paths:
+      - sbom.spdx.json
+    expire_in: 30 days

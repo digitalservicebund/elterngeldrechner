@@ -99,7 +99,7 @@ run = "npm run --silent audit-licenses"
 
 [tasks.audit-vulnerabilities]
 description = "Scan the working tree for known vulnerabilities with trivy"
-run = "trivy --quiet filesystem . --include-dev-deps --severity HIGH,CRITICAL --exit-code 1"
+run = "trivy --quiet filesystem . --include-dev-deps --severity MEDIUM,HIGH,CRITICAL --exit-code 1"
 
 [tasks.audit-secrets]
 description = "Scan the working tree for committed secrets with trivy"

@@ -107,7 +107,7 @@ generate-sbom:
 # All vulnerabilities means scanning the full filesystem
 # including the devDependencies on all security issue levels.
 daily-vulnerability-scan:
-  extends: .node-tools
+  extends: .mise-tools
   stage: test
   script: mise run audit-all-vulnerabilities
   only:

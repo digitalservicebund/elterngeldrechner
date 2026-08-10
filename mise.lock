@@ -136,6 +136,45 @@ checksum = "sha256:3ae3a5549e85c7ad5b20192ebcfee4371269deca51255f6f2f2e051c6541f
 url = "https://github.com/orhun/git-cliff/releases/download/v2.13.1/git-cliff-2.13.1-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/orhun/git-cliff/releases/assets/405851866"
 
+[[tools.glab]]
+version = "1.111.0"
+backend = "gitlab:gitlab-org/cli"
+
+[tools.glab."platforms.linux-arm64"]
+checksum = "sha256:13737967bf713574ac6c9b7316a8878c9a5920e1c1c3ccdc99772eafd274020a"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_linux_arm64.tar.gz"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_linux_arm64%2Etar%2Egz"
+
+[tools.glab."platforms.linux-arm64-musl"]
+checksum = "sha256:13737967bf713574ac6c9b7316a8878c9a5920e1c1c3ccdc99772eafd274020a"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_linux_arm64.tar.gz"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_linux_arm64%2Etar%2Egz"
+
+[tools.glab."platforms.linux-x64"]
+checksum = "sha256:d3aa186428ce6668455e2e35184c6f60b013840d759c7ea4cf02bac68d2a1827"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_linux_amd64.tar.gz"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_linux_amd64%2Etar%2Egz"
+
+[tools.glab."platforms.linux-x64-musl"]
+checksum = "sha256:d3aa186428ce6668455e2e35184c6f60b013840d759c7ea4cf02bac68d2a1827"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_linux_amd64.tar.gz"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_linux_amd64%2Etar%2Egz"
+
+[tools.glab."platforms.macos-arm64"]
+checksum = "sha256:5cef8943f7aa73dcd619928d13ece8465a07962f1b036d74eef4f3d258d5cec3"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_darwin_arm64.tar.gz"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_darwin_arm64%2Etar%2Egz"
+
+[tools.glab."platforms.macos-x64"]
+checksum = "sha256:bf97aee449ae37e31e0ce9c052dd42840487317fa6159a42bce633ebda4f7333"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_darwin_amd64.tar.gz"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_darwin_amd64%2Etar%2Egz"
+
+[tools.glab."platforms.windows-x64"]
+checksum = "sha256:583acbd311f249e19bed418bcac7c7a5b11cc71a6eaa9f31792a76c37a6fed64"
+url = "https://gitlab.com/gitlab-org/cli/-/releases/v1.111.0/downloads/glab_1.111.0_windows_amd64.zip"
+url_api = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/packages/generic/glab/1%2E111%2E0/glab_1%2E111%2E0_windows_amd64%2Ezip"
+
 [[tools.hk]]
 version = "1.53.0"
 backend = "aqua:jdx/hk"

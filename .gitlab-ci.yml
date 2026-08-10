@@ -100,7 +100,7 @@ secret-scan:
 vulnarability-scan:
   extends: .node-tools
   stage: test
-  script: mise run audit-vulnerabilities
+  script: mise run audit-critical-vulnerabilities
 
 # Compiles the widget without publishing it. MISE_ENV picks the build mode and
 # the base path, neither of which needs bucket credentials, so this stays free

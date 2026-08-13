@@ -1,1 +1,0 @@
-export { Anleitung } from "./Anleitung";

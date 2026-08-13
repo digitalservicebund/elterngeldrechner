@@ -1,1 +1,0 @@
-export { Startseite } from "./StartseitePage";

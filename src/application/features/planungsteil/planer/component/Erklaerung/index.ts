@@ -1,1 +1,0 @@
-export { Erklaerung } from "./Erklaerung";

@@ -1,1 +1,0 @@
-export { AbschnittMitAuswahloptionen } from "./AbschnittMitAuswahloptionen";

@@ -1,1 +1,0 @@
-export { Geldbetrag } from "./Geldbetrag";

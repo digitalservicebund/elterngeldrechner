@@ -1,1 +1,0 @@
-export { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";

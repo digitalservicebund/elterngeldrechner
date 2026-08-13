@@ -1,9 +1,0 @@
-export * from "./metrics";
-export {
-  isTrackingAllowedByUser,
-  pushTrackingEvent,
-  setTrackingVariable,
-  setupUserTracking,
-} from "./core";
-export * from "./posthog";
-export * from "./utilities";

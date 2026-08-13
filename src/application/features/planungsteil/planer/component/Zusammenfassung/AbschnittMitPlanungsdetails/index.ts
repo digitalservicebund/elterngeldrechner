@@ -1,1 +1,0 @@
-export { AbschnittMitPlanungsdetails } from "./AbschnittMitPlanungsdetails";
